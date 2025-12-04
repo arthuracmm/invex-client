@@ -97,28 +97,28 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
         {
             type: 'module',
             name: 'Estoque',
-            label: 'schedule',
+            label: 'stock',
             icon: <InventoryIcon />,
             iconOutlined: <Inventory2OutlinedIcon />,
             children: [
                 {
                     name: 'Produtos',
                     title: 'Gestão dos agendamentos dos pacientes',
-                    label: 'schedulings',
+                    label: 'products',
                     icon: <YardIcon />,
                     iconOutlined: <YardOutlinedIcon />
                 },
                 {
                     name: 'Entrada',
                     title: 'Gestão de agenda dos profissionais',
-                    label: 'calendar',
+                    label: 'entry',
                     icon: <AddCircleIcon />,
                     iconOutlined: <AddCircleOutlineOutlinedIcon />
                 },
                 {
                     name: 'Saida',
                     title: 'Gestão de agenda dos profissionais',
-                    label: 'calendar',
+                    label: 'output',
                     icon: <OutboundIcon />,
                     iconOutlined: <OutboundOutlinedIcon />
                 }
@@ -226,7 +226,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                                                 <Divider
                                                     orientation='vertical'
                                                     sx={{
-                                                        borderColor: activeTab === item.label ? '#6ee7b7' : undefined,
+                                                        borderColor: activeTab === item.label ? '#bef264' : undefined,
                                                     }}
                                                 />
                                                 <p>{item.name}</p>
@@ -291,30 +291,32 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                             </Popover>
                         </>
                     )}
-                    <Tooltip title={user?.email} arrow>
-                        <Avatar
-                            sx={{
-                                bgcolor: '#bef264',
-                                color: '#3f3f46',
-                                ':hover': {
-                                    bgcolor: '#a3e635',
-                                },
-                            }}
+                    <div className={`flex w-full justify-between items-center ${!sidebarOpen && 'flex-col gap-4 mb-2'}`}>
+                        <Tooltip title={user?.email} arrow>
+                            <Avatar
+                                sx={{
+                                    bgcolor: '#bef264',
+                                    color: '#3f3f46',
+                                    ':hover': {
+                                        bgcolor: '#a3e635',
+                                    },
+                                }}
+                            >
+                                {initials}
+                            </Avatar>
+                        </Tooltip>
+                        <p className={`${sidebarOpen ? 'flex' : 'hidden'}`}>
+                            {userName}
+                        </p>
+                        <button
+                            onClick={handleLogout}
+                            className='text-zinc-700 hover:text-red-800 hover:transition-colors cursor-pointer'
+                            aria-label="Logout"
+                            title="Logout"
                         >
-                            {initials}
-                        </Avatar>
-                    </Tooltip>
-                    <p>
-                        {userName}
-                    </p>
-                    <button
-                        onClick={handleLogout}
-                        className='text-zinc-700 hover:text-red-800 hover:transition-colors cursor-pointer'
-                        aria-label="Logout"
-                        title="Logout"
-                    >
-                        <LogOut />
-                    </button>
+                            <LogOut />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div >

@@ -6,6 +6,9 @@ import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import HomeContent from '../components/home/HomeContent';
+import ProductContent from '../components/products/ProductsContent';
+import EntryContent from '../components/entry/EntryContent';
+import OutputContent from '../components/output/OutputContent';
 
 interface MainLayoutProps {
     activeTab: string;
@@ -25,7 +28,13 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
     const renderContent = () => {
         switch (activeTab) {
             case "home":
-                return <HomeContent refreshKey={refreshKey}/>;
+                return <HomeContent refreshKey={refreshKey} />;
+            case "products":
+                return <ProductContent />;
+            case "entry":
+                return <EntryContent />;
+            case "output":
+                return <OutputContent />;
             default:
                 return null;
         }
@@ -46,8 +55,8 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
                     setSidebarOpen={setSidebarOpen}
                 />
             </aside>
-            <main className="flex-1 flex flex-col overflow-hidden border-t border-x border-zinc-200 rounded-xl">
-                <section className='w-full h-full overflow-hidden text-zinc-700  bg-white border border-zinc-200'>
+            <main className="flex-1 flex flex-col overflow-hidden border border-zinc-200 rounded-xl">
+                <section className='w-full h-full overflow-hidden text-zinc-700  bg-white'>
                     {pathname.includes(activeTab) ? renderContent() : <Loading />}
                 </section>
             </main>
