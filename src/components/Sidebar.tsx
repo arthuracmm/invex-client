@@ -4,33 +4,24 @@ import HomeIcon from '@mui/icons-material/Home';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import TokenIcon from '@mui/icons-material/Token';
-import TokenOutlinedIcon from '@mui/icons-material/TokenOutlined';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
-import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
-import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
-import ViewAgendaOutlinedIcon from '@mui/icons-material/ViewAgendaOutlined';
-import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import TaskIcon from '@mui/icons-material/Task';
-import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
-
-import { Divider, Tooltip } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import YardIcon from '@mui/icons-material/Yard';
+import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
+import OutboundIcon from '@mui/icons-material/Outbound';
+import OutboundOutlinedIcon from '@mui/icons-material/OutboundOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import { ChevronRight, Router } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { useEffect, useState } from 'react';
-import { Automations } from '@/types/EstablishmentData';
-import Cookies from "js-cookie";
-
-import axios from 'axios';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
+import LocationPinIcon from '@mui/icons-material/LocationPin';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
+import { Avatar, Chip, Divider, Popover, Tooltip } from '@mui/material';
+import { LogOut } from 'lucide-react';
 
 interface SidebarProps {
     activeTab: string;
@@ -42,6 +33,7 @@ interface SidebarProps {
     setModule: React.Dispatch<React.SetStateAction<string>>;
     setRefreshKey: React.Dispatch<React.SetStateAction<number>>;
 }
+
 
 export default function Sidebar({ activeTab, setActiveTab, setTitle, module, setModule, setRefreshKey, sidebarOpen, setSidebarOpen }: SidebarProps) {
     useEffect(() => {
@@ -57,30 +49,41 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
         }
     }, [sidebarOpen]);
 
-    const [automationsData, setAutomations] = useState<Automations[] | null>(null)
-
     const router = useRouter();
-    const { user } = useAuth()
+    const { user, logout } = useAuth();
 
-    const fetchAutomations = async () => {
-        if (!user) return null
-        const token = Cookies.get("token");
+    const handleLogout = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/establishment/${user?.establishment.id}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            )
-            console.log(response.data.automations)
-            setAutomations(response.data.automations);
-
-        } catch (err) {
-            console.error(err);
+            logout();
+            router.push('/');
+        } catch (error) {
+            console.error("Erro ao fazer logout:", error);
         }
     };
 
-    useEffect(() => {
-        if (user?.establishment) fetchAutomations();
-    }, [user?.establishment]);
+    const getInitials = (fullName: string) => {
+        if (!fullName) return '';
+        const names = fullName.trim().split(' ');
+        const firstInitial = names[0]?.[0] || '';
+        const secondInitial = names[1]?.[0] || '';
+        return `${firstInitial}${secondInitial}`.toUpperCase();
+    };
+
+    const userName = user?.fullName ?? '';
+    const initials = getInitials(userName);
+
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const openPopover = Boolean(anchorEl);
+    const id = openPopover ? 'simple-popover' : undefined;
 
     const items = [
         {
@@ -93,89 +96,34 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
         },
         {
             type: 'module',
-            name: 'Agendamento',
+            name: 'Estoque',
             label: 'schedule',
-            icon: <WatchLaterIcon />,
-            iconOutlined: <WatchLaterOutlinedIcon />,
+            icon: <InventoryIcon />,
+            iconOutlined: <Inventory2OutlinedIcon />,
             children: [
                 {
-                    name: 'Agendamentos',
+                    name: 'Produtos',
                     title: 'Gestão dos agendamentos dos pacientes',
                     label: 'schedulings',
-                    icon: <MoreTimeIcon />,
-                    iconOutlined: <MoreTimeIcon />
+                    icon: <YardIcon />,
+                    iconOutlined: <YardOutlinedIcon />
                 },
                 {
-                    name: 'Calendário',
+                    name: 'Entrada',
                     title: 'Gestão de agenda dos profissionais',
                     label: 'calendar',
-                    icon: <CalendarMonthIcon />,
-                    iconOutlined: <CalendarMonthOutlinedIcon />
+                    icon: <AddCircleIcon />,
+                    iconOutlined: <AddCircleOutlineOutlinedIcon />
+                },
+                {
+                    name: 'Saida',
+                    title: 'Gestão de agenda dos profissionais',
+                    label: 'calendar',
+                    icon: <OutboundIcon />,
+                    iconOutlined: <OutboundOutlinedIcon />
                 }
             ]
         },
-        {
-            type: 'module',
-            name: 'Gestão',
-            label: 'management',
-            icon: <TokenIcon />,
-            iconOutlined: <TokenOutlinedIcon />,
-            children: [
-                {
-                    name: 'Credenciais Automações',
-                    title: 'Gestão das credenciais do estabelecimento',
-                    label: 'credentials',
-                    icon: <SettingsSuggestIcon />,
-                    iconOutlined: <SettingsSuggestOutlinedIcon />
-                },
-                {
-                    name: 'Usuários',
-                    title: 'Gestão dos usuários',
-                    label: 'users',
-                    icon: <PeopleAltIcon />,
-                    iconOutlined: <PeopleAltOutlinedIcon />
-                }
-            ]
-        },
-        ...(automationsData?.some(item => item.name === 'agenda-siresp') ? [{
-            type: 'module',
-            name: 'SIRESP',
-            label: 'agenda-siresp',
-            icon: <ViewAgendaIcon />,
-            iconOutlined: <ViewAgendaOutlinedIcon />,
-            children: [
-                {
-                    name: 'Agendamento Tarefas',
-                    title: 'Agenda geral dos pacientes SIRESP',
-                    label: 'general-siresp',
-                    icon: <EventNoteIcon />,
-                    iconOutlined: <EventNoteOutlinedIcon />
-                },
-                {
-                    name: 'Dados Tarefas',
-                    title: 'Dados das tarefas SIRESP',
-                    label: 'task-data-siresp',
-                    icon: <TaskIcon />,
-                    iconOutlined: <TaskOutlinedIcon />
-                },
-            ]
-        }] : []),
-        ...(automationsData?.some(item => item.name === 'agenda-ame') ? [{
-            type: 'module',
-            name: 'AME',
-            label: 'agenda-ame',
-            icon: <ViewAgendaIcon />,
-            iconOutlined: <ViewAgendaOutlinedIcon />,
-            children: [
-                {
-                    name: 'Agendamento Tarefas',
-                    title: 'Agenda geral dos pacientes AME',
-                    label: 'general-ame',
-                    icon: <EventNoteIcon />,
-                    iconOutlined: <EventNoteOutlinedIcon />
-                }
-            ]
-        }] : [])
     ]
 
 
@@ -189,7 +137,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                 )}
 
                 <button
-                    className='cursor-pointer hover:bg-emerald-100 h-10 w-10 rounded-xl transition-colors'
+                    className='cursor-pointer hover:bg-lime-100 h-10 w-10 rounded-xl transition-colors'
                     onClick={() => {
                         setSidebarOpen(!sidebarOpen)
                         setRefreshKey(prev => prev + 1)
@@ -204,7 +152,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                     <div className="flex flex-col w-full" key={i.label}>
                         <div
                             className={`flex w-full p-2 rounded-lg gap- cursor-pointer transition-all border 
-                                ${(activeTab === i.label || module === i.label) ? 'bg-emerald-100 text-emerald-600 border-emerald-300' : 'border-zinc-300'}
+                                ${(activeTab === i.label || module === i.label) ? 'bg-lime-100 text-lime-600 border-lime-300' : 'border-zinc-300'}
                                 ${sidebarOpen ? 'w-full' : 'w-0 justify-center'}
                                 `}
                             onClick={() => {
@@ -240,7 +188,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                                                 <Divider
                                                     orientation='vertical'
                                                     sx={{
-                                                        borderColor: activeTab === i.label ? '#6ee7b7' : undefined,
+                                                        borderColor: activeTab === i.label ? '#bef264' : undefined,
                                                     }}
                                                 />
                                                 <p>{i.name}</p>
@@ -260,7 +208,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                                         key={item.label}
                                         className={`flex w-full rounded-lg gap-2 cursor-pointer transition-all overflow-hidden border p-2
                                             ${index === 0 && 'mt-2'}
-                                            ${activeTab === item.label ? 'bg-emerald-100 text-emerald-600 border-emerald-300 ' : 'border-zinc-300'}
+                                            ${activeTab === item.label ? 'bg-lime-100 text-lime-600 border-lime-300 ' : 'border-zinc-300'}
                                               ${sidebarOpen ? 'w-full' : 'w-0  justify-center'}
                                             `}
                                         onClick={() => {
@@ -290,6 +238,84 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                         </div>
                     </div >
                 ))}
+
+            </div>
+            <div className="flex flex-1 h-full w-full p-2 px-4 items-end">
+                <div className="flex items-center cursor-pointer justify-between w-full gap-4">
+                    {user?.establishment && (
+                        <>
+                            <Chip
+                                component='button'
+                                label={user.establishment.name}
+                                onClick={handleClick}
+                            />
+                            <Popover
+                                id={id}
+                                open={openPopover}
+                                anchorEl={anchorEl}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                sx={{ mt: 1 }}
+                            >
+                                <div className="flex flex-col text-xs gap-2 text-zinc-700">
+                                    <div className="flex gap-2 items-center justify-center w-full mt-4">
+                                        <p className='font-bold text-lg'>{user.establishment.name}</p>
+                                    </div>
+                                    <Divider sx={{ my: 1 }} />
+                                    <div className="flex flex-col gap-2 mx-3 mb-3">
+                                        <div className="flex gap-2 items-center">
+                                            <AlternateEmailIcon />
+                                            <p>{user.establishment.email}</p>
+                                        </div>
+                                        <div className="flex gap-2 items-center">
+                                            <WorkspacesIcon />
+                                            <p>{user.establishment.type}</p>
+                                        </div>
+                                        <div className="flex gap-2 items-center ">
+                                            <LocationPinIcon />
+                                            <p>
+                                                {user.establishment.adress}, {' '}
+                                                {user.establishment.number}, {' '}
+                                                {user.establishment.neighborhood}
+                                            </p>
+                                        </div>
+                                        <div className="flex gap-2 items-center">
+                                            <LocationCityIcon />
+                                            <p>{user.establishment.city}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Popover>
+                        </>
+                    )}
+                    <Tooltip title={user?.email} arrow>
+                        <Avatar
+                            sx={{
+                                bgcolor: '#bef264',
+                                color: '#3f3f46',
+                                ':hover': {
+                                    bgcolor: '#a3e635',
+                                },
+                            }}
+                        >
+                            {initials}
+                        </Avatar>
+                    </Tooltip>
+                    <p>
+                        {userName}
+                    </p>
+                    <button
+                        onClick={handleLogout}
+                        className='text-zinc-700 hover:text-red-800 hover:transition-colors cursor-pointer'
+                        aria-label="Logout"
+                        title="Logout"
+                    >
+                        <LogOut />
+                    </button>
+                </div>
             </div>
         </div >
     )

@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AuthService } from "../../service/auth/authService"
 import { Loader2Icon } from "lucide-react";
 import Divider from '@mui/material/Divider';
 import Person4OutlinedIcon from '@mui/icons-material/Person4Outlined';
@@ -11,8 +10,9 @@ import HttpsIcon from '@mui/icons-material/Https';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { VisibilityOff } from "@mui/icons-material";
 import LoginIcon from '@mui/icons-material/Login';
-import { useAuth } from "@/app/context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import { Alert, Snackbar } from "@mui/material";
+import { AuthService } from "@/src/service/auth/authService";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -67,12 +67,9 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex w-full h-screen items-center justify-center bg-white">
-            <div className="flex shadow-xl w-6xl items-center overflow-hidden">
-                <div className="flex flex-1 h-full bg-zinc-50 justify-center items-center">
-                    <img src="images/login.svg" alt="a" className="h-full" />
-                </div>
-                <div className="flex w-[47%] flex-col gap-6 p-10 px-25 justify-between">
+        <div className="flex w-full h-screen items-center justify-center bg-zinc-100">
+            <div className="flex shadow-xl w-[35%] items-center justify-center overflow-hidden rounded-xl bg-white">
+                <div className="flex flex-col gap-6 p-10 px-25 justify-between">
                     <div className="flex w-full justify-center mb-4">
                         <img src="images/santaBotText.png" alt="logo nossa" className="w-[70%]" />
                     </div>
