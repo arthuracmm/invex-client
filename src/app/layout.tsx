@@ -3,7 +3,7 @@ import { Raleway } from "next/font/google";
 
 import { Inter } from "next/font/google";
 import ThemeRegistry from "./ThemeRegistry";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "../context/AuthContext";
 import "./globals.css";
 
 const raleway = Raleway({ subsets: ["latin"] });
