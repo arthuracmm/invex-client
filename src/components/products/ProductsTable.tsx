@@ -23,7 +23,7 @@ interface ProductsTableProps {
 }
 
 export default function ProductsTable({ products, setSelectedProduct }: ProductsTableProps) {
-    const [orderBy, setOrderBy] = useState<keyof Product>("shortName");
+    const [orderBy, setOrderBy] = useState<keyof Product | "localization">("shortName");
     const [order, setOrder] = useState<Order>("asc");
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
@@ -31,15 +31,15 @@ export default function ProductsTable({ products, setSelectedProduct }: Products
         setFilteredProducts(products || []);
     }, [products]);
 
-    const handleSort = (property: keyof Product) => {
+    const handleSort = (property: keyof Product | "localization") => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
     };
 
     const sortedProducts = [...filteredProducts].sort((a, b) => {
-        const valueA = a[orderBy];
-        const valueB = b[orderBy];
+        const valueA: any = orderBy === "localization" ? a.inventories?.[0]?.location : a[orderBy as keyof Product];
+        const valueB: any = orderBy === "localization" ? b.inventories?.[0]?.location : b[orderBy as keyof Product];
 
         if (valueA == null) return 1;
         if (valueB == null) return -1;
@@ -98,6 +98,15 @@ export default function ProductsTable({ products, setSelectedProduct }: Products
                                     Qtd. Mínima
                                 </TableSortLabel>
                             </TableCell>
+                            <TableCell sortDirection={orderBy === "localization" ? order : false}>
+                                <TableSortLabel
+                                    active={orderBy === "localization"}
+                                    direction={orderBy === "localization" ? order : "asc"}
+                                    onClick={() => handleSort("localization")}
+                                >
+                                    Localização
+                                </TableSortLabel>
+                            </TableCell>
 
                             <TableCell>
                                 Ações
@@ -109,7 +118,7 @@ export default function ProductsTable({ products, setSelectedProduct }: Products
                         {sortedProducts.length > 0 ? (
                             sortedProducts.map((product) => (
                                 <TableRow
-                                    className="hover:bg-emerald-50 transition-colors cursor-pointer"
+                                    className="hover:bg-lime-200 transition-colors cursor-pointer"
                                     key={product.id}
                                 >
                                     <TableCell onClick={() => setSelectedProduct(product)}>
@@ -123,6 +132,9 @@ export default function ProductsTable({ products, setSelectedProduct }: Products
                                     </TableCell>
                                     <TableCell onClick={() => setSelectedProduct(product)}>
                                         {product.quantMin}
+                                    </TableCell>
+                                    <TableCell onClick={() => setSelectedProduct(product)}>
+                                        {product.inventories?.[0]?.location || "-"}
                                     </TableCell>
                                     <TableCell onClick={() => setSelectedProduct(product)}>
                                         <Tooltip arrow title={'Editar produto'}>

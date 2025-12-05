@@ -6,4 +6,9 @@ export const ProductService = {
         const response = await api.get("/product");
         return response.data;
     },
+
+    create: async (data: Omit<Product, "id">): Promise<Product> => {
+        const response = await api.post("/product", data);
+        return response.data;
+    },
 };
