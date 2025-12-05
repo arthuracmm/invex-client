@@ -28,14 +28,13 @@ export default function ProductContent() {
         <div className="flex h-full flex-col ">
             <div className="flex p-4 px-8 my-5 w-full justify-between items-center ">
                 <h1 className="text-4xl font-extrabold text-zinc-700">Produtos</h1>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
+                <button
+                    className="flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow"
                     onClick={() => setIsAddModalOpen(true)}
-                    sx={{ backgroundColor: "#65a30d", "&:hover": { backgroundColor: "#84cc16" } }}
                 >
-                    Adicionar Produto
-                </Button>
+                    <AddIcon />
+                    <p className="font-semibold group-hover:font-black transition-all">Adicionar Produto</p>
+                </button>
             </div>
             <Divider />
             <ProductsTable products={products} setSelectedProduct={setSelectedProduct} />

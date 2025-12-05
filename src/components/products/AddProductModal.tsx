@@ -55,7 +55,6 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
             };
             const createdProduct = await ProductService.create(productData);
 
-            // 2. Create Inventory
             if (createdProduct && createdProduct.id) {
                 await InventoryService.create({
                     productId: createdProduct.id,

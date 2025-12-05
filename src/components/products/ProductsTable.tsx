@@ -54,7 +54,7 @@ export default function ProductsTable({ products, setSelectedProduct }: Products
     });
 
     return (
-        <div className="flex h-full rounded-xl overflow-hidden overflow-y-auto border border-zinc-300">
+        <div className="flex h-full rounded-xl overflow-hidden overflow-y-auto m-4">
             <TableContainer>
                 <Table>
                     <TableHead style={{ position: "sticky", top: 0, backgroundColor: "#f5f5f5", zIndex: 1 }}>
@@ -118,7 +118,7 @@ export default function ProductsTable({ products, setSelectedProduct }: Products
                         {sortedProducts.length > 0 ? (
                             sortedProducts.map((product) => (
                                 <TableRow
-                                    className="hover:bg-lime-200 transition-colors cursor-pointer"
+                                    className="hover:bg-lime-50 transition-colors cursor-pointer"
                                     key={product.id}
                                 >
                                     <TableCell onClick={() => setSelectedProduct(product)}>
@@ -134,11 +134,18 @@ export default function ProductsTable({ products, setSelectedProduct }: Products
                                         {product.quantMin}
                                     </TableCell>
                                     <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.inventories?.[0]?.location || "-"}
+                                        {product?.inventories && product.inventories.length > 0 ? (
+                                            product.inventories.length === 1 ?
+                                                product.inventories[0]?.location :
+                                                product.inventories.map((local, index) => (
+                                                    local.location +
+                                                    (index < (product.inventories?.length || 0) - 1 ? ', ' : '')
+                                                )).join('')
+                                        ) : null}
                                     </TableCell>
                                     <TableCell onClick={() => setSelectedProduct(product)}>
                                         <Tooltip arrow title={'Editar produto'}>
-                                            <div className="flex bg-blue-400 text-white h-8 w-9 rounded-sm items-center justify-center">
+                                            <div className="flex bg-lime-500 text-white h-8 w-9 rounded-sm items-center justify-center">
                                                 <EditNoteIcon sx={{ fontSize: 20 }} />
                                             </div>
                                         </Tooltip>

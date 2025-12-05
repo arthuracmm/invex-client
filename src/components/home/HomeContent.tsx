@@ -30,7 +30,7 @@ export default function HomeContent({ refreshKey }: HomeContentProps) {
             </div>
 
             <Divider />
-            <div className="flex flex-col gap-5 h-full overflow-y-auto overflow-x-hidden pr-3 ml-8 mr-3 pt-5">
+            <div className="flex flex-col gap-5 h-full overflow-y-auto overflow-x-hidden pr-3 ml-4  pt-5">
                 <MessagesDashboard />
                 <PieChartsDashboards refreshKey={refreshKey} />
                 <FoulsDashboard refreshKey={refreshKey}/>

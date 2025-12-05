@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "INVEX",
   description: "Sistema de gestão de estoque",
-  icons: 'images/akin-NR.png'
+  icons: 'images/akin-N-icon.png'
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -34,33 +34,33 @@ export default function FoulsDashboard({ refreshKey }: FoulsDashboardProps) {
     return (
         <div className="flex flex-1 items-center gap-8 pb-4">
             <div className="grid grid-cols-6 w-full h-full justify-center gap-6 ">
-                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-emerald-500 border-b-emerald-500 col-span-3">
+                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-lime-500 border-b-lime-500 col-span-3">
                     <div className="flex flex-col items-center m-4">
                         <h1 className='font-extrabold text-4xl num-font'>{totalScheduling}</h1>
                         <h2 className="font-bold text-sm text-zinc-400">Total de agendamentos</h2>
                     </div>
                 </div>
 
-                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-emerald-500 border-b-emerald-500 col-span-3">
+                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-lime-500 border-b-lime-500 col-span-3">
                     <div className="flex flex-col items-center m-4">
                         <h1 className='font-extrabold text-4xl num-font'>{totalPresence}</h1>
                         <h2 className="font-bold text-sm text-zinc-400">Presenças</h2>
                     </div>
                 </div>
 
-                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-emerald-500 border-b-emerald-500 col-span-2">
+                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-lime-500 border-b-lime-500 col-span-2">
                     <div className="flex flex-col items-center m-4">
                         <h1 className='font-extrabold text-4xl num-font'>{totalFouls}</h1>
                         <h2 className="font-bold text-sm text-zinc-400">Faltas</h2>
                     </div>
                 </div>
-                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-emerald-500 border-b-emerald-500 col-span-2">
+                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-lime-500 border-b-lime-500 col-span-2">
                     <div className="flex flex-col items-center m-4">
                         <h1 className='font-extrabold text-4xl num-font'>{totalRescheduling}</h1>
                         <h2 className="font-bold text-sm text-zinc-400">Reagendamentos</h2>
                     </div>
                 </div>
-                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-emerald-500 border-b-emerald-500 col-span-2">
+                <div className="flex items-center border border-zinc-300 rounded-xl gap-4 overflow-hidden w-full justify-center border-l-5 border-b-5 border-l-lime-500 border-b-lime-500 col-span-2">
                     <div className="flex flex-col items-center m-4">
                         <h1 className='font-extrabold text-4xl num-font'>{noInformation}</h1>
                         <h2 className="font-bold text-sm text-zinc-400">Sem Informação</h2>
@@ -68,7 +68,7 @@ export default function FoulsDashboard({ refreshKey }: FoulsDashboardProps) {
                 </div>
             </div>
             <div className="flex flex-col w-[60%] items-center border border-zinc-300 rounded-xl pt-4 relative">
-                <div className="flex absolute left-0 top-0 text-emerald-500 bg-emerald-100 p-4 rounded-br-xl rounded-tl-xl">
+                <div className="flex absolute left-0 top-0 text-lime-500 bg-lime-100 p-4 rounded-br-xl rounded-tl-xl">
                     {chartsData.icon}
                 </div>
                 <h2 className="font-bold text-lg">{chartsData.name}</h2>

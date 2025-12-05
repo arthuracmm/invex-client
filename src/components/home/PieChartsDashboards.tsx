@@ -68,7 +68,7 @@ export default function PieChartsDashboards({ refreshKey }: PieChartsDashboardsP
             <div className="flex w-full justify-center gap-6 ">
                 {chartsData.map((chart, index) => (
                     <div key={index} className="flex flex-col items-center border border-zinc-300 rounded-xl w-full pt-4 pb-2 relative">
-                        <div className="flex absolute left-0 top-0 text-emerald-500 bg-emerald-100 p-4 rounded-br-xl rounded-tl-xl">
+                        <div className="flex absolute left-0 top-0 text-lime-500 bg-lime-100 p-4 rounded-br-xl rounded-tl-xl">
                             {chart.icon}
                         </div>
                         <h2 className="font-bold text-lg">{chart.name}</h2>
