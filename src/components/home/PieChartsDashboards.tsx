@@ -14,7 +14,7 @@ interface PieChartsDashboardsProps {
 export default function PieChartsDashboards({ refreshKey }: PieChartsDashboardsProps) {
     const chartsData = [
         {
-            name: 'Taxa de Resposta',
+            name: 'Total de Produtos',
             icon: <TimerIcon sx={{ fontSize: 30 }} />,
             data: [
                 { name: '5 Minutos', value: 1048 },

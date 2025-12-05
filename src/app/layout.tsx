@@ -10,9 +10,9 @@ const raleway = Raleway({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SantaBot",
-  description: "Sistema desenvolvido por Inovação e Melhoria SCF - 2025",
-  icons: 'images/santaBotIcon.png'
+  title: "INVEX",
+  description: "Sistema de gestão de estoque",
+  icons: 'images/akin-NR.png'
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
