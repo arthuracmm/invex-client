@@ -4,6 +4,7 @@ export interface Product {
     fullName: string;
     unitMeasure: string;
     quantMin: number;
+    
     inventories?: Inventory[];
 }
 
@@ -12,4 +13,5 @@ export interface Inventory {
     productId: string;
     quantity: number;
     location: string;
+    product?: Product;
 }

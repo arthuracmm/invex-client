@@ -33,7 +33,7 @@ export default function ProductContent({darkMode} : ProductContentProps) {
             <div className="flex p-4 px-8 my-5 w-full justify-between items-center ">
                 <h1 className={`text-4xl font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'} `}>Produtos</h1>
                 <button
-                    className="flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow"
+                    className="flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow "
                     onClick={() => setIsAddModalOpen(true)}
                 >
                     <AddIcon />

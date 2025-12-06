@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Product } from "../../types/Products";
+import { Product, Inventory } from "../../types/Products";
 import {
     Table,
     TableBody,
@@ -17,52 +17,49 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 
 type Order = "asc" | "desc";
 
-interface ProductsTableProps {
-    products: Product[];
-    setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>;
+interface EntryTableProps {
+    inventories: Inventory[];
+    onSelectProduct: (product: Product) => void;
     darkMode: boolean | null
 }
 
-export default function ProductsTable({ products, setSelectedProduct, darkMode }: ProductsTableProps) {
-    const [orderBy, setOrderBy] = useState<keyof Product | "localization" | "quantity">("shortName");
+export default function EntryTable({ inventories, onSelectProduct, darkMode }: EntryTableProps) {
+    const [orderBy, setOrderBy] = useState<keyof Inventory | "shortName" | "fullName">("shortName");
     const [order, setOrder] = useState<Order>("asc");
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+    const [sortedInventories, setSortedInventories] = useState<Inventory[]>([]);
 
     useEffect(() => {
-        setFilteredProducts(products || []);
-    }, [products]);
+        setSortedInventories(inventories || []);
+    }, [inventories]);
 
-    const handleSort = (property: keyof Product | "localization" | "quantity") => {
+    const handleSort = (property: keyof Inventory | "shortName" | "fullName") => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
     };
 
-    const sortedProducts = [...filteredProducts].sort((a, b) => {
+    const sortedData = [...sortedInventories].sort((a, b) => {
         let valueA: any;
         let valueB: any;
 
-        if (orderBy === "localization") {
-            valueA = a.inventories?.[0]?.location;
-            valueB = b.inventories?.[0]?.location;
-        } else if (orderBy === "quantity") {
-            valueA = a.inventories?.reduce((acc, curr) => acc + curr.quantity, 0) || 0;
-            valueB = b.inventories?.reduce((acc, curr) => acc + curr.quantity, 0) || 0;
+        if (orderBy === "shortName") {
+            valueA = a.product?.shortName || "";
+            valueB = b.product?.shortName || "";
+        } else if (orderBy === "fullName") {
+            valueA = a.product?.fullName || "";
+            valueB = b.product?.fullName || "";
         } else {
-            valueA = a[orderBy as keyof Product];
-            valueB = b[orderBy as keyof Product];
+            valueA = a[orderBy as keyof Inventory];
+            valueB = b[orderBy as keyof Inventory];
         }
 
-        if (valueA == null) return 1;
-        if (valueB == null) return -1;
-
-        if (typeof valueA === "number" && typeof valueB === "number") {
-            return order === "asc" ? valueA - valueB : valueB - valueA;
+        if (valueA < valueB) {
+            return order === "asc" ? -1 : 1;
         }
-
-        return order === "asc"
-            ? String(valueA).toLowerCase().localeCompare(String(valueB).toLowerCase())
-            : String(valueB).toLowerCase().localeCompare(String(valueA).toLowerCase());
+        if (valueA > valueB) {
+            return order === "asc" ? 1 : -1;
+        }
+        return 0;
     });
 
     return (
@@ -116,34 +113,6 @@ export default function ProductsTable({ products, setSelectedProduct, darkMode }
                                 </TableSortLabel>
                             </TableCell>
 
-                            <TableCell sortDirection={orderBy === "unitMeasure" ? order : false}>
-                                <TableSortLabel
-                                    active={orderBy === "unitMeasure"}
-                                    direction={orderBy === "unitMeasure" ? order : "asc"}
-                                    onClick={() => handleSort("unitMeasure")}
-                                >
-                                    Unidade de Medida
-                                </TableSortLabel>
-                            </TableCell>
-
-                            <TableCell sortDirection={orderBy === "quantMin" ? order : false}>
-                                <TableSortLabel
-                                    active={orderBy === "quantMin"}
-                                    direction={orderBy === "quantMin" ? order : "asc"}
-                                    onClick={() => handleSort("quantMin")}
-                                >
-                                    Qtd. Mínima
-                                </TableSortLabel>
-                            </TableCell>
-                            <TableCell sortDirection={orderBy === "localization" ? order : false}>
-                                <TableSortLabel
-                                    active={orderBy === "localization"}
-                                    direction={orderBy === "localization" ? order : "asc"}
-                                    onClick={() => handleSort("localization")}
-                                >
-                                    Localização
-                                </TableSortLabel>
-                            </TableCell>
                             <TableCell sortDirection={orderBy === "quantity" ? order : false}>
                                 <TableSortLabel
                                     active={orderBy === "quantity"}
@@ -154,6 +123,15 @@ export default function ProductsTable({ products, setSelectedProduct, darkMode }
                                 </TableSortLabel>
                             </TableCell>
 
+                            <TableCell sortDirection={orderBy === "location" ? order : false}>
+                                <TableSortLabel
+                                    active={orderBy === "location"}
+                                    direction={orderBy === "location" ? order : "asc"}
+                                    onClick={() => handleSort("location")}
+                                >
+                                    Localização
+                                </TableSortLabel>
+                            </TableCell>
 
                             <TableCell>
                                 Ações
@@ -162,35 +140,27 @@ export default function ProductsTable({ products, setSelectedProduct, darkMode }
                     </TableHead>
 
                     <TableBody>
-                        {sortedProducts.length > 0 ? (
-                            sortedProducts.map((product) => (
+                        {sortedData.length > 0 ? (
+                            sortedData.map((inventory) => (
                                 <TableRow
                                     className="hover:bg-lime-50 transition-colors cursor-pointer"
-                                    key={product.id}
+                                    key={inventory.id}
                                 >
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.shortName}
+                                    <TableCell>
+                                        {inventory.product?.shortName}
                                     </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.fullName}
+                                    <TableCell>
+                                        {inventory.product?.fullName}
                                     </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.unitMeasure}
+                                    <TableCell>
+                                        {inventory.quantity}
                                     </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.quantMin}
+                                    <TableCell>
+                                        {inventory.location}
                                     </TableCell>
 
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product?.inventories && product.inventories.length > 0 ?
-                                            Array.from(new Set(product.inventories.map(inv => inv.location))).join(", ")
-                                            : null}
-                                    </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.inventories?.reduce((acc, curr) => acc + curr.quantity, 0) || 0}
-                                    </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        <Tooltip arrow title={'Editar produto'}>
+                                    <TableCell onClick={() => inventory.product && onSelectProduct(inventory.product)}>
+                                        <Tooltip arrow title={'Adicionar Estoque'}>
                                             <div className="flex bg-lime-500 text-white h-8 w-9 rounded-sm items-center justify-center">
                                                 <EditNoteIcon sx={{ fontSize: 20 }} />
                                             </div>
@@ -201,7 +171,7 @@ export default function ProductsTable({ products, setSelectedProduct, darkMode }
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={5} align="center">
-                                    <Typography color="text.secondary">Nenhum produto encontrado.</Typography>
+                                    <Typography color="text.secondary">Nenhum registro de entrada encontrado.</Typography>
                                 </TableCell>
                             </TableRow>
                         )}

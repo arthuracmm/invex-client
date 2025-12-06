@@ -29,15 +29,15 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
         fullName: "",
         unitMeasure: "",
         quantMin: 0,
-        location: "",
-        initialQuantity: 0,
+        
+
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]: name === "quantMin" || name === "initialQuantity" ? Number(value) : value,
+            [name]: name === "quantMin" ?    Number(value) : value,
         }));
     };
 
@@ -55,13 +55,7 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
             };
             const createdProduct = await ProductService.create(productData);
 
-            if (createdProduct && createdProduct.id) {
-                await InventoryService.create({
-                    productId: createdProduct.id,
-                    quantity: formData.initialQuantity,
-                    location: formData.location,
-                });
-            }
+           
 
             onSuccess();
             onClose();
@@ -71,8 +65,8 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
                 fullName: "",
                 unitMeasure: "",
                 quantMin: 0,
-                location: "",
-                initialQuantity: 0,
+                
+                
             });
         } catch (err: any) {
             console.error("Error creating product:", err);
@@ -131,29 +125,13 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
                             onChange={handleChange}
                             fullWidth
                             required
+                             inputProps={{
+                                min: 0,
+                            }}
                         />
                     </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            label="Localização"
-                            name="location"
-                            value={formData.location}
-                            onChange={handleChange}
-                            fullWidth
-                            required
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            label="Quantidade Inicial"
-                            name="initialQuantity"
-                            type="number"
-                            value={formData.initialQuantity}
-                            onChange={handleChange}
-                            fullWidth
-                            required
-                        />
-                    </Grid>
+                    
+                
                 </Grid>
             </DialogContent>
             <DialogActions>

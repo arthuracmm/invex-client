@@ -12,4 +12,9 @@ export const InventoryService = {
         const response = await api.post("/inventory", data);
         return response.data;
     },
+
+    getAll: async (): Promise<Inventory[]> => {
+        const response = await api.get("/inventory");
+        return response.data;
+    },
 };
