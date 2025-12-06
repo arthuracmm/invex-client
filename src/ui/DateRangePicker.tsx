@@ -9,9 +9,10 @@ interface DateRangePickerProps {
     onChange: (range: { startDate: Dayjs | null, endDate: Dayjs | null }) => void;
     withTime?: boolean;
     dateSelected?: { startDate: Dayjs | null; endDate: Dayjs | null };
+    darkMode: boolean
 }
 
-const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, withTime = false, dateSelected }) => {
+const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, withTime = false, dateSelected, darkMode }) => {
     const [startDate, setStartDate] = useState<Dayjs | null>(
         dateSelected?.startDate ? dayjs(dateSelected.startDate) : dayjs()
     );
@@ -39,8 +40,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, withTime = 
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div className="flex w-full gap-4 items-center">
-                <div className='w-full'>
+            <div className={`flex w-full h-full gap-4 px-10 items-center ${darkMode && 'bg-white'}`}>
+                <div className='w-full '>
                     <DatePicker
                         label="De"
                         value={startDate}

@@ -22,6 +22,8 @@ import LocationPinIcon from '@mui/icons-material/LocationPin';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import { Avatar, Chip, Divider, Popover, Tooltip } from '@mui/material';
 import { LogOut } from 'lucide-react';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 interface SidebarProps {
     activeTab: string;
@@ -32,10 +34,12 @@ interface SidebarProps {
     module: string;
     setModule: React.Dispatch<React.SetStateAction<string>>;
     setRefreshKey: React.Dispatch<React.SetStateAction<number>>;
+    darkMode: boolean | null
+    setDarkMode: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 
-export default function Sidebar({ activeTab, setActiveTab, setTitle, module, setModule, setRefreshKey, sidebarOpen, setSidebarOpen }: SidebarProps) {
+export default function Sidebar({ activeTab, setActiveTab, setTitle, module, setModule, setRefreshKey, sidebarOpen, setSidebarOpen, darkMode, setDarkMode }: SidebarProps) {
     useEffect(() => {
         const savedState = localStorage.getItem("sidebarOpen");
         if (savedState !== null) {
@@ -44,10 +48,23 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
     }, []);
 
     useEffect(() => {
+        const savedState = localStorage.getItem("darkMode");
+        if (savedState !== null) {
+            setDarkMode(savedState === "true");
+        }
+    }, []);
+
+    useEffect(() => {
         if (sidebarOpen !== null) {
             localStorage.setItem("sidebarOpen", sidebarOpen.toString());
         }
     }, [sidebarOpen]);
+
+    useEffect(() => {
+        if (darkMode !== null) {
+            localStorage.setItem("darkMode", darkMode.toString());
+        }
+    }, [darkMode]);
 
     const router = useRouter();
     const { user, logout } = useAuth();
@@ -128,7 +145,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
 
 
     return (
-        <div className={`flex flex-col ${sidebarOpen ? 'w-80' : 'w-24'} h-full overflow-hidden text-zinc-700 transition-all`}>
+        <div className={`flex flex-col ${sidebarOpen ? 'w-80' : 'w-24'} h-full overflow-hidden ${darkMode ? 'text-white' : 'text-zinc-700'}  transition-all`}>
             <div className={`flex ${!sidebarOpen && 'flex-col'} justify-between m-4 items-center gap-4 transition-all`}>
                 {sidebarOpen ? (
                     <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-fit" />
@@ -136,15 +153,29 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                     <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-fit" />
                 )}
 
-                <button
-                    className='cursor-pointer hover:bg-lime-100 h-10 w-10 rounded-xl transition-colors'
-                    onClick={() => {
-                        setSidebarOpen(!sidebarOpen)
-                        setRefreshKey(prev => prev + 1)
-                    }
-                    }>
-                    {sidebarOpen ? <MenuOpenIcon /> : <MenuIcon />}
-                </button>
+                <div className="flex">
+                    {sidebarOpen && (
+                        <button
+                            className={`cursor-pointer ${darkMode ? 'hover:bg-lime-700' : 'hover:bg-lime-100'} h-10 w-10 rounded-xl transition-colors`}
+                            onClick={() => {
+                                setDarkMode(!darkMode)
+                                setRefreshKey(prev => prev + 1)
+                            }
+                            }>
+                            {darkMode ? <DarkModeIcon /> : <LightModeIcon />}
+                        </button>
+                    )}
+
+                    <button
+                        className={`cursor-pointer ${darkMode ? 'hover:bg-lime-700' : 'hover:bg-lime-100'} h-10 w-10 rounded-xl transition-colors`}
+                        onClick={() => {
+                            setSidebarOpen(!sidebarOpen)
+                            setRefreshKey(prev => prev + 1)
+                        }
+                        }>
+                        {sidebarOpen ? <MenuOpenIcon /> : <MenuIcon />}
+                    </button>
+                </div>
             </div>
             <Divider />
             <div className="flex flex-col gap-2 mt-5 m-4 items-center">
@@ -152,7 +183,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                     <div className="flex flex-col w-full" key={i.label}>
                         <div
                             className={`flex w-full p-2 rounded-lg gap- cursor-pointer transition-all border 
-                                ${(activeTab === i.label || module === i.label) ? 'bg-lime-100 text-lime-600 border-lime-300' : 'border-zinc-300'}
+                                ${(activeTab === i.label || module === i.label) ? `${darkMode ? 'bg-lime-900 text-lime-300 border-lime-300' : 'bg-lime-100 text-lime-600 border-lime-300'}` : `${darkMode ? 'border-zinc-400' : 'border-zinc-300'}`}
                                 ${sidebarOpen ? 'w-full' : 'w-0 justify-center'}
                                 `}
                             onClick={() => {
@@ -201,14 +232,14 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                                 </div>
                             </Tooltip>
                         </div>
-                        <div className={`flex flex-col gap-2 ${module !== i.label ? 'h-0' : 'h-full'} transition-all overflow-hidden ${sidebarOpen && 'border-l border-zinc-300 pl-2 ml-2'}`}>
+                        <div className={`flex flex-col gap-2 ${module !== i.label ? 'h-0' : 'h-full'} transition-all overflow-hidden ${sidebarOpen && `border-l ${darkMode ? 'border-zinc-500' : 'border-zinc-300'} pl-2 ml-2`}`}>
                             {i.children && (
                                 i.children.map((item, index) => (
                                     <div
                                         key={item.label}
                                         className={`flex w-full rounded-lg gap-2 cursor-pointer transition-all overflow-hidden border p-2
                                             ${index === 0 && 'mt-2'}
-                                            ${activeTab === item.label ? 'bg-lime-100 text-lime-600 border-lime-300 ' : 'border-zinc-300'}
+                                            ${activeTab === item.label ? `${darkMode ? 'bg-lime-900 text-lime-300 border-lime-300' : 'bg-lime-100 text-lime-600 border-lime-300'}` : `${darkMode ? 'border-zinc-400' : 'border-zinc-300'}`}
                                               ${sidebarOpen ? 'w-full' : 'w-0  justify-center'}
                                             `}
                                         onClick={() => {
@@ -310,7 +341,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                         </p>
                         <button
                             onClick={handleLogout}
-                            className='text-zinc-700 hover:text-red-800 hover:transition-colors cursor-pointer'
+                            className={`${darkMode ? 'text-white hover:text-red-400' : 'text-zinc-700 hover:text-red-800'} transition-colors cursor-pointer`}
                             aria-label="Logout"
                             title="Logout"
                         >

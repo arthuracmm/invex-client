@@ -6,7 +6,11 @@ import { ProductService } from "../../service/products/productService";
 import AddProductModal from "./AddProductModal";
 import AddIcon from '@mui/icons-material/Add';
 
-export default function ProductContent() {
+interface ProductContentProps{
+    darkMode:boolean | null
+}
+
+export default function ProductContent({darkMode} : ProductContentProps) {
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -27,7 +31,7 @@ export default function ProductContent() {
     return (
         <div className="flex h-full flex-col ">
             <div className="flex p-4 px-8 my-5 w-full justify-between items-center ">
-                <h1 className="text-4xl font-extrabold text-zinc-700">Produtos</h1>
+                <h1 className={`text-4xl font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'} `}>Produtos</h1>
                 <button
                     className="flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow"
                     onClick={() => setIsAddModalOpen(true)}
@@ -37,7 +41,7 @@ export default function ProductContent() {
                 </button>
             </div>
             <Divider />
-            <ProductsTable products={products} setSelectedProduct={setSelectedProduct} />
+            <ProductsTable products={products} setSelectedProduct={setSelectedProduct} darkMode={darkMode}/>
             <AddProductModal
                 open={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}

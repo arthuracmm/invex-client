@@ -24,13 +24,14 @@ interface MainLayoutProps {
 export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSidebarOpen, module, setModule, title, setTitle }: MainLayoutProps) {
     const pathname = usePathname();
     const [refreshKey, setRefreshKey] = useState(0);
+    const [darkMode, setDarkMode] = useState<boolean | null>(null);
 
     const renderContent = () => {
         switch (activeTab) {
             case "home":
-                return <HomeContent refreshKey={refreshKey} />;
+                return <HomeContent refreshKey={refreshKey} darkMode={darkMode}/>;
             case "products":
-                return <ProductContent />;
+                return <ProductContent darkMode={darkMode}/>;
             case "entry":
                 return <EntryContent />;
             case "output":
@@ -42,8 +43,8 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
 
 
     return (
-        <div className="flex w-full min-h-screen max-h-screen overflow-hidden gap-1 p-1 bg-zinc-100">
-            <aside className="bg-white border border-zinc-200 rounded-xl">
+        <div className={`flex w-full min-h-screen max-h-screen overflow-hidden gap-1 p-1 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} transition-colors`}>
+            <aside className={` ${darkMode ? 'bg-zinc-700 border-zinc-700' : 'bg-white border-zinc-200'} border rounded-xl transition-colors`}>
                 <Sidebar
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
@@ -53,10 +54,12 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
                     setRefreshKey={setRefreshKey}
                     sidebarOpen={sidebarOpen}
                     setSidebarOpen={setSidebarOpen}
+                    darkMode={darkMode}
+                    setDarkMode={setDarkMode}
                 />
             </aside>
-            <main className="flex-1 flex flex-col overflow-hidden border border-zinc-200 rounded-xl">
-                <section className='w-full h-full overflow-hidden text-zinc-700  bg-white'>
+            <main className={`flex-1 flex flex-col overflow-hidden border ${darkMode ? 'border-zinc-700' : 'border-zinc-200 '} rounded-xl transition-colors`}>
+                <section className={`w-full h-full overflow-hidden ${darkMode ? 'text-white bg-zinc-700' : 'text-zinc-700  bg-white'} transition-colors`}>
                     {pathname.includes(activeTab) ? renderContent() : <Loading />}
                 </section>
             </main>

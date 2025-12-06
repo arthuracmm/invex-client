@@ -9,9 +9,10 @@ import FoulsDashboard from "./FoulsDashboard";
 
 interface HomeContentProps {
     refreshKey: number
+    darkMode: boolean | null
 }
 
-export default function HomeContent({ refreshKey }: HomeContentProps) {
+export default function HomeContent({ refreshKey, darkMode }: HomeContentProps) {
 
     const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
 
@@ -20,20 +21,28 @@ export default function HomeContent({ refreshKey }: HomeContentProps) {
         console.log('Intervalo de datas:', newRange);
     };
 
+    const today = new Date();
+    const monthName = today.toLocaleString('pt-BR', { month: 'long' });
+
+    const formattedMonth =  monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase();
+
     return (
         <div className="flex h-full flex-col ">
-            <div className="flex p-4 px-8 my-5 w-full justify-between items-center ">
-                <h1 className="text-4xl font-extrabold text-zinc-700">Dashboards</h1>
-                <div className="flex">
-                    <DateRangePicker onChange={handleDateChange} />
+            <div className="flex w-full justify-between items-center ">
+                <h1 className={`text-4xl p-4 px-10 my-5 font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'}`}>Dashboards</h1>
+                <div className="flex h-full w-[40%] ">
+                    {/* <DateRangePicker onChange={handleDateChange} darkMode={darkMode}/> */}
+                    <div className="flex w-full items-center justify-end pr-10">
+                        <h1 className='font-extrabold text-4xl num-font'>Ultimo mês<span className='font-light text-2xl'>/{formattedMonth}</span></h1>
+                    </div>
                 </div>
             </div>
 
             <Divider />
             <div className="flex flex-col gap-5 h-full overflow-y-auto overflow-x-hidden pr-3 ml-4  pt-5">
-                <MessagesDashboard />
-                <PieChartsDashboards refreshKey={refreshKey} />
-                <FoulsDashboard refreshKey={refreshKey}/>
+                <MessagesDashboard darkMode={darkMode} />
+                <PieChartsDashboards refreshKey={refreshKey} darkMode={darkMode} />
+                <FoulsDashboard refreshKey={refreshKey} darkMode={darkMode} />
             </div>
         </div>
     )

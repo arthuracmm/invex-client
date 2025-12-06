@@ -20,9 +20,10 @@ type Order = "asc" | "desc";
 interface ProductsTableProps {
     products: Product[];
     setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>;
+    darkMode: boolean | null
 }
 
-export default function ProductsTable({ products, setSelectedProduct }: ProductsTableProps) {
+export default function ProductsTable({ products, setSelectedProduct, darkMode }: ProductsTableProps) {
     const [orderBy, setOrderBy] = useState<keyof Product | "localization">("shortName");
     const [order, setOrder] = useState<Order>("asc");
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -57,7 +58,32 @@ export default function ProductsTable({ products, setSelectedProduct }: Products
         <div className="flex h-full rounded-xl overflow-hidden overflow-y-auto m-4">
             <TableContainer>
                 <Table>
-                    <TableHead style={{ position: "sticky", top: 0, backgroundColor: "#f5f5f5", zIndex: 1 }}>
+                    <TableHead
+                        style={{
+                            position: "sticky",
+                            top: 0,
+                            backgroundColor: darkMode ? "#52525b" : "#f5f5f5",
+                            zIndex: 1
+                        }}
+                        sx={darkMode ? {
+                            "& .MuiTableCell-root": {
+                                color: "gray",
+                            },
+                            "& .MuiTableSortLabel-root": {
+                                color: "white",
+                            },
+                            "& .MuiTableSortLabel-root:hover": {
+                                color: "white",
+                            },
+                            "& .MuiTableSortLabel-root.Mui-active": {
+                                color: "white",
+                            },
+                            "& .MuiTableSortLabel-icon": {
+                                color: "white !important",
+                            }
+                        } : {}}
+                    >
+
                         <TableRow>
                             <TableCell sortDirection={orderBy === "shortName" ? order : false}>
                                 <TableSortLabel
