@@ -20,7 +20,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Order = "asc" | "desc";
 
-interface EntryTableProps {
+interface OutputTableProps {
     movimentation: Movimentation[];
     darkMode: boolean | null
     currentPage: number
@@ -29,7 +29,7 @@ interface EntryTableProps {
     pageSize: number
 }
 
-export default function EntryTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize }: EntryTableProps) {
+export default function OutputTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize }: OutputTableProps) {
     const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName">("shortName");
     const [order, setOrder] = useState<Order>("asc");
     const [sortedMovimentations, setSortedMovimentations] = useState<Movimentation[]>([]);

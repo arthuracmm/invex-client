@@ -17,7 +17,7 @@ import { Product } from "../../types/Products";
 import { MovimentationService } from "@/src/service/movimentation/movimentationService";
 import { useAuth } from "@/src/context/AuthContext";
 
-interface AddInventoryModalProps {
+interface SubInventoryModalProps {
     open: boolean;
     onClose: () => void;
     product: Product | null;
@@ -25,13 +25,12 @@ interface AddInventoryModalProps {
     onSuccess: () => void;
 }
 
-export default function AddInventoryModal({ open, onClose, product, products, onSuccess }: AddInventoryModalProps) {
+export default function SubInventoryModal({ open, onClose, product, products, onSuccess }: SubInventoryModalProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
     const { user } = useAuth()
-
 
     const [formData, setFormData] = useState({
         quantity: 0,
@@ -59,7 +58,6 @@ export default function AddInventoryModal({ open, onClose, product, products, on
         }));
     };
 
-
     if (!user) return
 
     const handleSubmit = async () => {
@@ -72,7 +70,7 @@ export default function AddInventoryModal({ open, onClose, product, products, on
         setError(null);
 
         try {
-            await MovimentationService.createEntry({
+            await MovimentationService.createOutput({
                 userId: user.id,
                 productId: selectedProduct.id,
                 quantity: formData.quantity,
@@ -96,11 +94,10 @@ export default function AddInventoryModal({ open, onClose, product, products, on
         }
     };
 
-
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
             <DialogTitle>
-                {product ? `Adicionar Estoque - ${product.shortName}` : "Nova Entrada de Estoque"}
+                {product ? `Remover Estoque - ${product.shortName}` : "Nova Saída de Estoque"}
             </DialogTitle>
             <DialogContent>
                 {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}

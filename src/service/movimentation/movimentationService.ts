@@ -24,4 +24,9 @@ export const MovimentationService = {
         const response = await api.get(`/movimentations/entry?page=${page}&pageSize=${pageSize}`);
         return response.data;
     },
+
+    getAllOutput: async (page: number, pageSize: number) => {
+        const response = await api.get(`/movimentations/output?page=${page}&pageSize=${pageSize}`);
+        return response.data;
+    },
 };
