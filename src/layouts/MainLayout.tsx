@@ -9,6 +9,7 @@ import HomeContent from '../components/home/HomeContent';
 import ProductContent from '../components/products/ProductsContent';
 import EntryContent from '../components/entry/EntryContent';
 import OutputContent from '../components/output/OutputContent';
+import { DarkMode } from '@mui/icons-material';
 
 interface MainLayoutProps {
     activeTab: string;
@@ -33,7 +34,7 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
             case "products":
                 return <ProductContent darkMode={darkMode}/>;
             case "entry":
-                return <EntryContent />;
+                return <EntryContent darkMode={darkMode} />;
             case "output":
                 return <OutputContent />;
             default:

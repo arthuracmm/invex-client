@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Product, Inventory } from "../../types/Products";
 import {
     Table,
     TableBody,
@@ -14,31 +13,50 @@ import {
     Typography,
 } from "@mui/material";
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import { Movimentation } from "@/src/types/Movimentation";
+import { Product } from "@/src/types/Products";
+import { dateConverter } from "@/src/utils/TextUtils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Order = "asc" | "desc";
 
 interface EntryTableProps {
-    inventories: Inventory[];
-    onSelectProduct: (product: Product) => void;
+    movimentation: Movimentation[];
     darkMode: boolean | null
+    currentPage: number
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+    totalPages: number
+    pageSize: number
 }
 
-export default function EntryTable({ inventories, onSelectProduct, darkMode }: EntryTableProps) {
-    const [orderBy, setOrderBy] = useState<keyof Inventory | "shortName" | "fullName">("shortName");
+export default function EntryTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize }: EntryTableProps) {
+    const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName">("shortName");
     const [order, setOrder] = useState<Order>("asc");
-    const [sortedInventories, setSortedInventories] = useState<Inventory[]>([]);
+    const [sortedMovimentations, setSortedMovimentations] = useState<Movimentation[]>([]);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prev => prev + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
+    };
 
     useEffect(() => {
-        setSortedInventories(inventories || []);
-    }, [inventories]);
+        setSortedMovimentations(movimentation || []);
+    }, [movimentation]);
 
-    const handleSort = (property: keyof Inventory | "shortName" | "fullName") => {
+    const handleSort = (property: keyof Movimentation | "shortName" | "fullName") => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
     };
 
-    const sortedData = [...sortedInventories].sort((a, b) => {
+    const sortedData = [...sortedMovimentations].sort((a, b) => {
         let valueA: any;
         let valueB: any;
 
@@ -49,8 +67,8 @@ export default function EntryTable({ inventories, onSelectProduct, darkMode }: E
             valueA = a.product?.fullName || "";
             valueB = b.product?.fullName || "";
         } else {
-            valueA = a[orderBy as keyof Inventory];
-            valueB = b[orderBy as keyof Inventory];
+            valueA = a[orderBy as keyof Movimentation];
+            valueB = b[orderBy as keyof Movimentation];
         }
 
         if (valueA < valueB) {
@@ -63,7 +81,7 @@ export default function EntryTable({ inventories, onSelectProduct, darkMode }: E
     });
 
     return (
-        <div className="flex h-full rounded-xl overflow-hidden overflow-y-auto m-4">
+        <div className="flex flex-1 justify-between flex-col gap-2 h-full rounded-xl overflow-hidden overflow-y-auto m-4">
             <TableContainer>
                 <Table>
                     <TableHead
@@ -133,38 +151,53 @@ export default function EntryTable({ inventories, onSelectProduct, darkMode }: E
                                 </TableSortLabel>
                             </TableCell>
 
-                            <TableCell>
-                                Ações
+                            <TableCell sortDirection={orderBy === "user" ? order : false}>
+                                <TableSortLabel
+                                    active={orderBy === "user"}
+                                    direction={orderBy === "user" ? order : "asc"}
+                                    onClick={() => handleSort("user")}
+                                >
+                                    Usuário
+                                </TableSortLabel>
+                            </TableCell>
+
+
+                            <TableCell sortDirection={orderBy === "createdAt" ? order : false}>
+                                <TableSortLabel
+                                    active={orderBy === "createdAt"}
+                                    direction={orderBy === "createdAt" ? order : "asc"}
+                                    onClick={() => handleSort("createdAt")}
+                                >
+                                    Criado em
+                                </TableSortLabel>
                             </TableCell>
                         </TableRow>
                     </TableHead>
 
                     <TableBody>
                         {sortedData.length > 0 ? (
-                            sortedData.map((inventory) => (
+                            sortedData.map((movimentation) => (
                                 <TableRow
                                     className="hover:bg-lime-50 transition-colors cursor-pointer"
-                                    key={inventory.id}
+                                    key={movimentation.id}
                                 >
                                     <TableCell>
-                                        {inventory.product?.shortName}
+                                        {movimentation.product?.shortName}
                                     </TableCell>
                                     <TableCell>
-                                        {inventory.product?.fullName}
+                                        {movimentation.product?.fullName}
                                     </TableCell>
                                     <TableCell>
-                                        {inventory.quantity}
+                                        {movimentation.quantity}
                                     </TableCell>
                                     <TableCell>
-                                        {inventory.location}
+                                        {movimentation.location}
                                     </TableCell>
-
-                                    <TableCell onClick={() => inventory.product && onSelectProduct(inventory.product)}>
-                                        <Tooltip arrow title={'Adicionar Estoque'}>
-                                            <div className="flex bg-lime-500 text-white h-8 w-9 rounded-sm items-center justify-center">
-                                                <EditNoteIcon sx={{ fontSize: 20 }} />
-                                            </div>
-                                        </Tooltip>
+                                    <TableCell>
+                                        {movimentation.user.fullName}
+                                    </TableCell>
+                                    <TableCell>
+                                        {dateConverter(movimentation.createdAt)}
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -178,6 +211,32 @@ export default function EntryTable({ inventories, onSelectProduct, darkMode }: E
                     </TableBody>
                 </Table>
             </TableContainer>
+            <div className="flex w-full justify-center">
+                <div className="flex justify-center items-center gap-2 border border-zinc-300 w-fit rounded-xl overflow-hidden num-font">
+
+                    <button
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 1}
+                        className="p-2 border-r border-zinc-300 hover:bg-lime-500 hover:text-white transition-colors disabled:text-zinc-300 disabled:hover:bg-zinc-200 cursor-pointer disabled:cursor-not-allowed"
+                    >
+                        <ChevronLeft />
+                    </button>
+
+                    <p className="w-16 font-bold text-center ">
+                        {currentPage}
+                        <span className="font-normal text-zinc-400">/{Math.ceil(totalPages / pageSize)}</span>
+                    </p>
+
+                    <button
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages}
+                        className="p-2 border-l border-zinc-300 hover:bg-lime-500 hover:text-white transition-colors disabled:text-zinc-300 disabled:hover:bg-zinc-200 cursor-pointer disabled:cursor-not-allowed"
+                    >
+                        <ChevronRight />
+                    </button>
+
+                </div>
+            </div>
         </div>
     );
 }

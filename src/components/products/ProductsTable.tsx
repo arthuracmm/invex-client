@@ -165,10 +165,10 @@ export default function ProductsTable({ products, setSelectedProduct, darkMode }
                         {sortedProducts.length > 0 ? (
                             sortedProducts.map((product) => (
                                 <TableRow
-                                    className="hover:bg-lime-50 transition-colors cursor-pointer"
+                                    className="hover:bg-lime-50 transition-colors cursor-pointer "
                                     key={product.id}
                                 >
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
+                                    <TableCell className="text-white" onClick={() => setSelectedProduct(product)}>
                                         {product.shortName}
                                     </TableCell>
                                     <TableCell onClick={() => setSelectedProduct(product)}>

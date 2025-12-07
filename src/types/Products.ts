@@ -1,3 +1,5 @@
+import { Inventory } from "./Inventory";
+
 export interface Product {
     id: string;
     shortName: string;
@@ -6,12 +8,4 @@ export interface Product {
     quantMin: number;
     
     inventories?: Inventory[];
-}
-
-export interface Inventory {
-    id: string;
-    productId: string;
-    quantity: number;
-    location: string;
-    product?: Product;
 }

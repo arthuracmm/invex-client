@@ -33,11 +33,9 @@ export default function AddInventoryModal({ open, onClose, product, products, on
         location: "",
     });
 
-    // Update selected product when prop changes
     useEffect(() => {
         if (open) {
             setSelectedProduct(product);
-            // Reset form if opening without a pre-selected product
             if (!product) {
                 setFormData({
                     quantity: 0,
