@@ -1,21 +1,20 @@
 
 import { useState, useEffect } from "react";
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
     TextField,
-    Grid,
     CircularProgress,
-    Alert,
     Autocomplete,
+    Modal,
+    Divider,
+    InputLabel,
 } from "@mui/material";
-import { InventoryService } from "../../service/inventory/inventoryService";
 import { Product } from "../../types/Products";
 import { MovimentationService } from "@/src/service/movimentation/movimentationService";
 import { useAuth } from "@/src/context/AuthContext";
+import { X } from "lucide-react";
+import ParkIcon from '@mui/icons-material/Park';
+import NumbersIcon from '@mui/icons-material/Numbers';
+import PlaceIcon from '@mui/icons-material/Place';
 
 interface AddInventoryModalProps {
     open: boolean;
@@ -56,6 +55,10 @@ export default function AddInventoryModal({ open, onClose, product, products, on
         setFormData((prev) => ({
             ...prev,
             [name]: name === "quantity" ? Number(value) : value,
+        }));
+        setFormData((prev) => ({
+            ...prev,
+            [name]: name === "location" ? value.toUpperCase() : value.toUpperCase(),
         }));
     };
 
@@ -98,65 +101,115 @@ export default function AddInventoryModal({ open, onClose, product, products, on
 
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-            <DialogTitle>
-                {product ? `Adicionar Estoque - ${product.shortName}` : "Nova Entrada de Estoque"}
-            </DialogTitle>
-            <DialogContent>
-                {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-                <Grid container spacing={2} sx={{ mt: 1 }}>
-                    <Grid size={{ xs: 12 }}>
-                        <Autocomplete
-                            options={products}
-                            getOptionLabel={(option) => `${option.shortName} - ${option.fullName}`}
-                            value={selectedProduct}
-                            onChange={(_, newValue) => setSelectedProduct(newValue)}
-                            disabled={!!product}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Produto"
-                                    placeholder="Pesquise por nome..."
-                                    fullWidth
-                                    required={!product}
+        <Modal
+            open={open}
+            onClose={onClose}
+            className="flex items-center justify-center text-zinc-700"
+        >
+            <div className="flex flex-col bg-white shadow-2xl md:w-[60%] md:h-[60%] rounded-2xl outline-none overflow-hidden relative pb-12 md:pb-0">
+                <div className="flex p-8 px-10 w-full md:justify-between justify-center items-center ">
+                    <h1 className="md:text-3xl text-2xl font-bold text-zinc-700">Nova entrada no estoque</h1>
+                    <button
+                        onClick={() => {
+                            onClose()
+                        }
+                        }
+                        className="cursor-pointer hover:bg-emerald-50 rounded-full p-2 transition-colors box-content"
+                    >
+                        <X className="hidden md:flex"/>
+                    </button>
+                </div>
+                <Divider />
+
+                <div className="flex flex-1 overflow-hidden">
+                    <div className="hidden md:flex w-full items-center justify-center">
+                        <img src="images/newEntries.svg" alt="a" className="h-full" />
+                    </div>
+                    <div className="flex p-2 w-full justify-center items-center">
+                        <div className="p-4 space-y-4">
+                            <div className="flex w-full gap-2 items-center">
+                                <Autocomplete
+                                    options={products}
+                                    getOptionLabel={(option) => `${option.shortName} - ${option.fullName}`}
+                                    value={selectedProduct}
+                                    onChange={(_, newValue) => setSelectedProduct(newValue)}
+                                    disabled={!!product}
+                                    sx={{ width: '100%' }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Produto"
+                                            placeholder="Pesquise por nome..."
+                                            fullWidth
+                                            required={!product}
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                startAdornment: (
+                                                    <>
+                                                        <ParkIcon sx={{ mr: 1, color: 'action.active' }} />
+                                                        {params.InputProps.startAdornment}
+                                                    </>
+                                                ),
+                                            }}
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            label="Quantidade"
-                            name="quantity"
-                            type="number"
-                            value={formData.quantity}
-                            onChange={handleChange}
-                            fullWidth
-                            required
-                            inputProps={{
-                                min: 0,
-                            }}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            label="Localização"
-                            name="location"
-                            value={formData.location}
-                            onChange={handleChange}
-                            fullWidth
-                            required
-                        />
-                    </Grid>
-                </Grid>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose} color="inherit" disabled={loading}>
-                    Cancelar
-                </Button>
-                <Button onClick={handleSubmit} variant="contained" disabled={loading}>
-                    {loading ? <CircularProgress size={24} /> : "Adicionar"}
-                </Button>
-            </DialogActions>
-        </Dialog>
+
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <TextField
+                                    label="Quantidade"
+                                    name="quantity"
+                                    type="number"
+                                    value={formData.quantity}
+                                    onChange={handleChange}
+                                    required
+                                    inputProps={{ min: 0 }}
+                                    fullWidth
+                                    InputProps={{
+                                        startAdornment: (
+                                            <NumbersIcon sx={{ mr: 1, color: 'action.active' }} />
+                                        )
+                                    }}
+                                />
+
+                                <TextField
+                                    label="Localização"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    required
+                                    fullWidth
+                                    InputProps={{
+                                        startAdornment: (
+                                            <PlaceIcon sx={{ mr: 1, color: 'action.active' }} />
+                                        )
+                                    }}
+                                />
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div className="flex absolute gap-4 bottom-4 right-4">
+                    <button
+                        onClick={onClose}
+                        disabled={loading}
+                        className="bg-lime-100 p-2 px-6 rounded cursor-pointer font-semibold hover:font-black transition-all"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className="bg-lime-500 p-2 px-6 rounded cursor-pointer text-white font-semibold hover:font-black transition-all"
+                    >
+                        {loading ? <CircularProgress size={24} /> : "Adicionar"}
+                    </button>
+                </div>
+            </div>
+        </Modal>
     );
 }

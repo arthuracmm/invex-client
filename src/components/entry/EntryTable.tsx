@@ -12,7 +12,6 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Movimentation } from "@/src/types/Movimentation";
 import { Product } from "@/src/types/Products";
 import { dateConverter } from "@/src/utils/TextUtils";
@@ -27,9 +26,10 @@ interface EntryTableProps {
     setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
     totalPages: number
     pageSize: number
+    handleOpenModal: (product : Product) => void;
 }
 
-export default function EntryTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize }: EntryTableProps) {
+export default function EntryTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize, handleOpenModal }: EntryTableProps) {
     const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName">("shortName");
     const [order, setOrder] = useState<Order>("asc");
     const [sortedMovimentations, setSortedMovimentations] = useState<Movimentation[]>([]);
@@ -180,6 +180,7 @@ export default function EntryTable({ movimentation, darkMode, currentPage, setCu
                                 <TableRow
                                     className="hover:bg-lime-50 transition-colors cursor-pointer"
                                     key={movimentation.id}
+                                    onClick={() => handleOpenModal(movimentation.product)}
                                 >
                                     <TableCell>
                                         {movimentation.product?.shortName}

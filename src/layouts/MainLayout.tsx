@@ -36,7 +36,7 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
             case "entry":
                 return <EntryContent darkMode={darkMode} />;
             case "output":
-                return <OutputContent />;
+                return <OutputContent darkMode={darkMode}/>;
             default:
                 return null;
         }
@@ -44,8 +44,8 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
 
 
     return (
-        <div className={`flex w-full min-h-screen max-h-screen overflow-hidden gap-1 p-1 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} transition-colors`}>
-            <aside className={` ${darkMode ? 'bg-zinc-700 border-zinc-700' : 'bg-white border-zinc-200'} border rounded-xl transition-colors`}>
+        <div className={`flex w-full min-h-screen max-h-screen overflow-hidden gap-1 p-1 ${darkMode ? 'bg-zinc-900' : 'bg-zinc-100'} transition-colors`}>
+            <aside className={` ${darkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200'} border rounded-xl transition-colors`}>
                 <Sidebar
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
@@ -60,7 +60,7 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
                 />
             </aside>
             <main className={`flex-1 flex flex-col overflow-hidden border ${darkMode ? 'border-zinc-700' : 'border-zinc-200 '} rounded-xl transition-colors`}>
-                <section className={`w-full h-full overflow-hidden ${darkMode ? 'text-white bg-zinc-700' : 'text-zinc-700  bg-white'} transition-colors`}>
+                <section className={`w-full h-full overflow-hidden ${darkMode ? 'text-white bg-zinc-800' : 'text-zinc-700  bg-white'} transition-colors`}>
                     {pathname.includes(activeTab) ? renderContent() : <Loading />}
                 </section>
             </main>
