@@ -12,7 +12,6 @@ interface ProductContentProps{
 
 export default function ProductContent({darkMode} : ProductContentProps) {
     const [products, setProducts] = useState<Product[]>([]);
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     const fetchProducts = async () => {
@@ -41,7 +40,7 @@ export default function ProductContent({darkMode} : ProductContentProps) {
                 </button>
             </div>
             <Divider />
-            <ProductsTable products={products} setSelectedProduct={setSelectedProduct} darkMode={darkMode}/>
+            <ProductsTable products={products} darkMode={darkMode}/>
             <AddProductModal
                 open={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}

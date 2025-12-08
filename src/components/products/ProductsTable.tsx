@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Product } from "../../types/Products";
 import {
     Table,
@@ -14,19 +14,20 @@ import {
     Typography,
 } from "@mui/material";
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import { ChevronRight } from "lucide-react";
 
 type Order = "asc" | "desc";
 
 interface ProductsTableProps {
     products: Product[];
-    setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>;
     darkMode: boolean | null
 }
 
-export default function ProductsTable({ products, setSelectedProduct, darkMode }: ProductsTableProps) {
+export default function ProductsTable({ products, darkMode }: ProductsTableProps) {
     const [orderBy, setOrderBy] = useState<keyof Product | "localization" | "quantity">("shortName");
     const [order, setOrder] = useState<Order>("asc");
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<string>('');
 
     useEffect(() => {
         setFilteredProducts(products || []);
@@ -156,7 +157,7 @@ export default function ProductsTable({ products, setSelectedProduct, darkMode }
 
 
                             <TableCell>
-                                Ações
+                                Abrir
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -164,48 +165,69 @@ export default function ProductsTable({ products, setSelectedProduct, darkMode }
                     <TableBody>
                         {sortedProducts.length > 0 ? (
                             sortedProducts.map((product) => (
-                                <TableRow
-                                    className="hover:bg-lime-50 transition-colors cursor-pointer "
-                                    key={product.id}
-                                >
-                                    <TableCell className="text-white" onClick={() => setSelectedProduct(product)}>
-                                        {product.shortName}
-                                    </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.fullName}
-                                    </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.unitMeasure}
-                                    </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.quantMin}
-                                    </TableCell>
-
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product?.inventories && product.inventories.length > 0 ?
-                                            Array.from(new Set(product.inventories.map(inv => inv.location))).join(", ")
-                                            : null}
-                                    </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        {product.inventories?.reduce((acc, curr) => acc + curr.quantity, 0) || 0}
-                                    </TableCell>
-                                    <TableCell onClick={() => setSelectedProduct(product)}>
-                                        <Tooltip arrow title={'Editar produto'}>
-                                            <div className="flex bg-lime-500 text-white h-8 w-9 rounded-sm items-center justify-center">
-                                                <EditNoteIcon sx={{ fontSize: 20 }} />
+                                <React.Fragment key={product.id}>
+                                    <TableRow
+                                        className="hover:bg-lime-50 transition-colors cursor-pointer"
+                                        onClick={() => {
+                                            if (selectedProduct === product.id) {
+                                                setSelectedProduct('')
+                                            } else {
+                                                setSelectedProduct(product.id)
+                                            }
+                                        }}
+                                    >
+                                        <TableCell className="text-white">{product.shortName}</TableCell>
+                                        <TableCell>{product.fullName}</TableCell>
+                                        <TableCell>{product.unitMeasure}</TableCell>
+                                        <TableCell>{product.quantMin}</TableCell>
+                                        <TableCell>
+                                            {product?.inventories && product.inventories.length > 0
+                                                ? Array.from(new Set(product.inventories.map(inv => inv.location))).join(", ")
+                                                : null}
+                                        </TableCell>
+                                        <TableCell>
+                                            {product.inventories?.reduce((acc, curr) => acc + curr.quantity, 0) || 0}
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex text-zinc-700  h-8 w-9 rounded-sm items-center justify-center">
+                                                <ChevronRight className={`${selectedProduct === product.id && 'rotate-90'} transition-all`} />
                                             </div>
-                                        </Tooltip>
-                                    </TableCell>
-                                </TableRow>
+                                        </TableCell>
+                                    </TableRow>
+
+                                    {selectedProduct === product.id && (
+                                        <TableRow>
+                                            <TableCell colSpan={7}>
+                                                <div className=" rounded">
+                                                    {product.inventories?.map((item) => (
+                                                        <div className="flex gap-2" key={item.id}>
+                                                            <p className="font-bold">{item.location}</p>
+                                                            <p >{item.quantity}</p>
+                                                        </div>
+                                                    )
+                                                    )}
+                                                    <div className="mt-2">
+                                                        <img
+                                                            src={`/api/barcode?text=${product.id}`}
+                                                            alt={`Código de barras de ${product.shortName}`}
+                                                            className="h-12"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </React.Fragment >
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={5} align="center">
+                                <TableCell colSpan={7} align="center">
                                     <Typography color="text.secondary">Nenhum produto encontrado.</Typography>
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
+
                 </Table>
             </TableContainer>
         </div>

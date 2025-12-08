@@ -112,35 +112,29 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
             iconOutlined: <HomeOutlinedIcon />
         },
         {
-            type: 'module',
-            name: 'Estoque',
-            label: 'stock',
-            icon: <InventoryIcon />,
-            iconOutlined: <Inventory2OutlinedIcon />,
-            children: [
-                {
-                    name: 'Produtos',
-                    title: 'Gestão dos agendamentos dos pacientes',
-                    label: 'products',
-                    icon: <YardIcon />,
-                    iconOutlined: <YardOutlinedIcon />
-                },
-                {
-                    name: 'Entrada',
-                    title: 'Gestão de agenda dos profissionais',
-                    label: 'entry',
-                    icon: <AddCircleIcon />,
-                    iconOutlined: <AddCircleOutlineOutlinedIcon />
-                },
-                {
-                    name: 'Saida',
-                    title: 'Gestão de agenda dos profissionais',
-                    label: 'output',
-                    icon: <OutboundIcon />,
-                    iconOutlined: <OutboundOutlinedIcon />
-                }
-            ]
+            type: 'item',
+            name: 'Produtos',
+            title: 'Gestão dos agendamentos dos pacientes',
+            label: 'products',
+            icon: <YardIcon />,
+            iconOutlined: <YardOutlinedIcon />
         },
+        {
+            type: 'item',
+            name: 'Entrada',
+            title: 'Gestão de agenda dos profissionais',
+            label: 'entry',
+            icon: <AddCircleIcon />,
+            iconOutlined: <AddCircleOutlineOutlinedIcon />
+        },
+        {
+            type: 'item',
+            name: 'Saida',
+            title: 'Gestão de agenda dos profissionais',
+            label: 'output',
+            icon: <OutboundIcon />,
+            iconOutlined: <OutboundOutlinedIcon />
+        }
     ]
 
 
@@ -153,7 +147,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                     <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-fit" />
                 )}
 
-                <div className="flex">
+                <div className="hidden md:flex">
                     {sidebarOpen && (
                         <button
                             className={`cursor-pointer ${darkMode ? 'hover:bg-lime-700' : 'hover:bg-lime-100'} h-10 w-10 rounded-xl transition-colors`}
@@ -180,7 +174,10 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
             <Divider />
             <div className="flex flex-col gap-2 mt-5 m-4 items-center">
                 {items.map((i) => (
-                    <div className="flex flex-col w-full" key={i.label}>
+                    <div
+                        className={`flex flex-col w-full ${i.label === "home" && "hidden md:flex"}`}
+                        key={i.label}
+                    >
                         <div
                             className={`flex w-full p-2 rounded-lg gap- cursor-pointer transition-all border 
                                 ${(activeTab === i.label || module === i.label) ? `${darkMode ? 'bg-lime-900 text-lime-300 border-lime-300' : 'bg-lime-100 text-lime-600 border-lime-300'}` : `${darkMode ? 'border-zinc-400' : 'border-zinc-300'}`}
@@ -231,41 +228,6 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
                                     )}
                                 </div>
                             </Tooltip>
-                        </div>
-                        <div className={`flex flex-col gap-2 ${module !== i.label ? 'h-0' : 'h-full'} transition-all overflow-hidden ${sidebarOpen && `border-l ${darkMode ? 'border-zinc-500' : 'border-zinc-300'} pl-2 ml-2`}`}>
-                            {i.children && (
-                                i.children.map((item, index) => (
-                                    <div
-                                        key={item.label}
-                                        className={`flex w-full rounded-lg gap-2 cursor-pointer transition-all overflow-hidden border p-2
-                                            ${index === 0 && 'mt-2'}
-                                            ${activeTab === item.label ? `${darkMode ? 'bg-lime-900 text-lime-300 border-lime-300' : 'bg-lime-100 text-lime-600 border-lime-300'}` : `${darkMode ? 'border-zinc-400' : 'border-zinc-300'}`}
-                                              ${sidebarOpen ? 'w-full' : 'w-0  justify-center'}
-                                            `}
-                                        onClick={() => {
-                                            setActiveTab(item.label)
-                                            setTitle(item.title)
-                                            router.push(`/${item.label}`)
-                                        }
-                                        }
-                                    >
-                                        <Tooltip title={!sidebarOpen && item.name} arrow key={item.label}>
-                                            {activeTab === item.label ? item.icon : item.iconOutlined}
-                                        </Tooltip>
-                                        {sidebarOpen && (
-                                            <>
-                                                <Divider
-                                                    orientation='vertical'
-                                                    sx={{
-                                                        borderColor: activeTab === item.label ? '#bef264' : undefined,
-                                                    }}
-                                                />
-                                                <p>{item.name}</p>
-                                            </>
-                                        )}
-                                    </div>
-                                ))
-                            )}
                         </div>
                     </div >
                 ))}
