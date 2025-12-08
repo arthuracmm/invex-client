@@ -9,6 +9,7 @@ import { MovimentationService } from "@/src/service/movimentation/movimentationS
 import { Movimentation } from "@/src/types/Movimentation";
 import Loading from "../Loading";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import MobileScanner from "../MobileScanner";
 
 interface EntryContentProps {
     darkMode: boolean | null
@@ -24,6 +25,13 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
 
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [pageSize, setPageSize] = useState<number>(20)
+
+    const [scannerOpen, setScannerOpen] = useState(false);
+
+    const handleCodeDetected = (code: string) => {
+        alert("Código detectado:" + code);
+        setScannerOpen(false);
+    };
 
     const fetchData = async () => {
         setLoading(true)
@@ -66,7 +74,7 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
     if (loading) return < Loading />
     return (
         <div className="flex h-full flex-col ">
-            <div className="flex p-4 px-8 my-5 w-full md:justify-between gap-2 justify-center items-center">
+            <div className="flex p-4 px-8 md:my-5 w-full md:justify-between gap-2 justify-center items-center">
                 <h1 className="text-4xl font-extrabold text-zinc-700 ">Entrada</h1>
                 <button
                     className="hidden md:flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow "
@@ -98,12 +106,22 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                 </button>
                 <button
                     className="flex gap-2 bg-blue-500 px-4 p-2 rounded text-white group cursor-pointer shadow w-full justify-center"
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => setScannerOpen(true)}
                 >
                     <CameraAltIcon />
-                    <p className="font-semibold group-hover:font-black transition-all">Adicionar Pelo Codigo</p>
+                    <p className="font-semibold group-hover:font-black transition-all">
+                        Adicionar Pelo Codigo
+                    </p>
                 </button>
             </div>
+
+            {scannerOpen && (
+                <MobileScanner
+                    onDetected={handleCodeDetected}
+                    onClose={() => setScannerOpen(false)}
+                />
+            )}
+
             <AddInventoryModal
                 open={isModalOpen}
                 onClose={handleCloseModal}

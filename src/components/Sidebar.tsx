@@ -142,9 +142,9 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
         <div className={`flex flex-col ${sidebarOpen ? 'w-80' : 'w-24'} h-full overflow-hidden ${darkMode ? 'text-white' : 'text-zinc-700'}  transition-all`}>
             <div className={`flex ${!sidebarOpen && 'flex-col'} justify-between m-4 items-center gap-4 transition-all`}>
                 {sidebarOpen ? (
-                    <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-fit" />
+                    <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-10" />
                 ) : (
-                    <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-fit" />
+                    <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-10" />
                 )}
 
                 <div className="hidden md:flex">

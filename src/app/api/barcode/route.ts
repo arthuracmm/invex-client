@@ -1,6 +1,6 @@
 // app/api/barcode/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import bwipjs from "bwip-js";
+import QRCode from "qrcode";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -11,16 +11,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const pngBuffer = await bwipjs.toBuffer({
-      bcid: "code128",
-      text: text,
-      scale: 3,
-      height: 10,
-      includetext: true,
-      textxalign: "center",
+    // Gera o QR Code como buffer PNG
+    const pngBuffer = await QRCode.toBuffer(text, {
+      type: "png",
+      width: 500, // largura em pixels, ajuste se quiser maior/menor
+      margin: 2,  // margem em blocos
     });
 
-    // Converte o Buffer do Node para Uint8Array
     const pngArray = new Uint8Array(pngBuffer);
 
     return new NextResponse(pngArray, {
