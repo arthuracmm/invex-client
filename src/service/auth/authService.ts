@@ -51,7 +51,10 @@ export const AuthService = {
   },
 
   login: async ({ email, password }: LoginPayload) => {
-    const response = await api.post("/auth/login", { email, password });
+   const response = await api.post("https://api.hugozera.space/auth/login", { email, password }, {
+  withCredentials: true, // <== envia cookies HttpOnly do backend
+});
+
     const { access_token } = response.data;
 
     Cookies.set("token", access_token, { expires: 8 / 24, sameSite: "Strict" });
