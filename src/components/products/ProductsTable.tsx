@@ -210,7 +210,7 @@ export default function ProductsTable({ products, darkMode }: ProductsTableProps
                                                         <img
                                                             src={`/api/barcode?text=${product.id}`}
                                                             alt={`Código de barras de ${product.shortName}`}
-                                                            className="h-12"
+                                                            className="h-40"
                                                         />
                                                     </div>
                                                 </div>

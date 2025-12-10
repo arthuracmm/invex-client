@@ -81,8 +81,8 @@ export default function EntryTable({ movimentation, darkMode, currentPage, setCu
     });
 
     return (
-        <div className="flex flex-1 justify-between flex-col gap-2 h-full rounded-xl overflow-hidden overflow-y-auto m-4">
-            <TableContainer>
+        <div className="flex flex-1 h-full justify-between flex-col gap-4 rounded-xl overflow-hidden overflow-y-auto">
+            <TableContainer className="border border-zinc-300 rounded-xl h-full">
                 <Table>
                     <TableHead
                         style={{

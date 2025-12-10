@@ -68,10 +68,10 @@ export default function LoginPage() {
 
     return (
         <div className="flex w-full h-screen items-center justify-center bg-zinc-100">
-            <div className="flex shadow-xl w-[35%] items-center justify-center overflow-hidden rounded-xl bg-white">
+            <div className="flex shadow-xl max-w-200 items-center justify-center  rounded-xl bg-white">
                 <div className="flex flex-col gap-6 p-10 px-25 justify-between">
                     <div className="flex w-full justify-center mb-4">
-                        <img src="images/santaBotText.png" alt="logo nossa" className="w-[70%]" />
+                        <img src="images/akin-NR.png" alt="logo nossa" className="w-[40%]" />
                     </div>
                     <form onSubmit={handleLogin}>
                         <div className="mb-3 flex w-full flex-col">
@@ -86,7 +86,7 @@ export default function LoginPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     autoComplete="email"
-                                    className="bg-white p-3 pl-10 w-full h-full border-none focus:outline-none"
+                                    className="bg-white p-3 pl-10 w-full h-full border-none focus:outline-none min-w-50"
                                 />
                             </div>
                         </div>

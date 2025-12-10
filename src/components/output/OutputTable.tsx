@@ -27,9 +27,10 @@ interface OutputTableProps {
     setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
     totalPages: number
     pageSize: number
+    handleOpenModal: (product: Product) => void;
 }
 
-export default function OutputTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize }: OutputTableProps) {
+export default function OutputTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize, handleOpenModal}: OutputTableProps) {
     const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName">("shortName");
     const [order, setOrder] = useState<Order>("asc");
     const [sortedMovimentations, setSortedMovimentations] = useState<Movimentation[]>([]);
@@ -81,8 +82,8 @@ export default function OutputTable({ movimentation, darkMode, currentPage, setC
     });
 
     return (
-        <div className="flex flex-1 justify-between flex-col gap-2 h-full rounded-xl overflow-hidden overflow-y-auto m-4">
-            <TableContainer>
+        <div className="flex flex-1 h-full justify-between flex-col gap-4 rounded-xl overflow-hidden overflow-y-auto">
+            <TableContainer className="border border-zinc-300 rounded-xl h-full">
                 <Table>
                     <TableHead
                         style={{
@@ -180,6 +181,7 @@ export default function OutputTable({ movimentation, darkMode, currentPage, setC
                                 <TableRow
                                     className="hover:bg-lime-50 transition-colors cursor-pointer"
                                     key={movimentation.id}
+                                    onClick={() => handleOpenModal(movimentation.product)}
                                 >
                                     <TableCell>
                                         {movimentation.product?.shortName}

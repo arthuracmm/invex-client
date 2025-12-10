@@ -78,14 +78,17 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
             </div>
             <Divider />
             {loading ? <Loading /> : (
-                <OutputTable
-                    movimentation={movimentation}
-                    darkMode={darkMode}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    totalPages={totalPages}
-                    pageSize={pageSize}
-                />
+                <div className="hidden md:flex h-full p-4">
+                    <OutputTable
+                        movimentation={movimentation}
+                        darkMode={darkMode}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        totalPages={totalPages}
+                        pageSize={pageSize}
+                        handleOpenModal={handleOpenModal}
+                    />
+                </div>
             )}
             <SubInventoryModal
                 open={isModalOpen}
