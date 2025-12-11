@@ -10,6 +10,7 @@ import { Movimentation } from "@/src/types/Movimentation";
 import Loading from "../Loading";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import MobileScanner from "../MobileScanner";
+import ShortcutListener from "@/src/ui/ShortcutListener";
 
 interface EntryContentProps {
     darkMode: boolean | null
@@ -129,6 +130,8 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                 products={products}
                 onSuccess={handleSuccess}
             />
+
+            <ShortcutListener onShortcut={() => setIsModalOpen(true)} />
         </div>
     )
 }

@@ -6,7 +6,7 @@ interface CreateMovimentationDto {
     userId: string;
     productId: string;
     location: string;
-    quantity: number;
+    quantity: number | undefined;
 }
 
 export const MovimentationService = {

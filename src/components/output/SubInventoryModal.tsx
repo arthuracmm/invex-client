@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
     TextField,
     CircularProgress,
@@ -14,6 +14,7 @@ import { X } from "lucide-react";
 import ParkIcon from '@mui/icons-material/Park';
 import NumbersIcon from '@mui/icons-material/Numbers';
 import PlaceIcon from '@mui/icons-material/Place';
+import ShortcutListener from "@/src/ui/ShortcutListener";
 
 interface SubInventoryModalProps {
     open: boolean;
@@ -28,10 +29,20 @@ export default function SubInventoryModal({ open, onClose, product, products, on
     const [error, setError] = useState<string | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
+    const autoCompleteInputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        if (open) {
+            setTimeout(() => {
+                autoCompleteInputRef.current?.focus();
+            }, 50);
+        }
+    }, [open]);
+
     const { user } = useAuth()
 
     const [formData, setFormData] = useState({
-        quantity: 0,
+        quantity: undefined,
         location: "",
     });
 
@@ -40,7 +51,7 @@ export default function SubInventoryModal({ open, onClose, product, products, on
             setSelectedProduct(product);
             if (!product) {
                 setFormData({
-                    quantity: 0,
+                    quantity: undefined,
                     location: "",
                 });
             }
@@ -53,6 +64,10 @@ export default function SubInventoryModal({ open, onClose, product, products, on
         setFormData((prev) => ({
             ...prev,
             [name]: name === "quantity" ? Number(value) : value,
+        }));
+        setFormData((prev) => ({
+            ...prev,
+            [name]: name === "location" ? value.toUpperCase() : value.toUpperCase(),
         }));
     };
 
@@ -79,7 +94,7 @@ export default function SubInventoryModal({ open, onClose, product, products, on
             onClose();
 
             setFormData({
-                quantity: 0,
+                quantity: undefined,
                 location: "",
             });
             setSelectedProduct(null);
@@ -127,9 +142,31 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                     onChange={(_, newValue) => setSelectedProduct(newValue)}
                                     disabled={!!product}
                                     sx={{ width: '100%' }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+
+                                            const inputValue = autoCompleteInputRef.current?.value.toLowerCase() || '';
+                                            const filtered = products.filter(
+                                                (p) =>
+                                                    p.shortName.toLowerCase().includes(inputValue) ||
+                                                    p.fullName.toLowerCase().includes(inputValue)
+                                            );
+
+                                            if (filtered.length > 0) {
+                                                setSelectedProduct(filtered[0]);
+                                            }
+                                        }
+                                    }}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
+                                            inputRef={(el) => {
+                                                autoCompleteInputRef.current = el;
+                                                if (params.InputProps.ref) {
+                                                    (params.InputProps.ref as any).current = el;
+                                                }
+                                            }}
                                             label="Produto"
                                             placeholder="Pesquise por nome..."
                                             fullWidth
@@ -159,6 +196,7 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                     required
                                     inputProps={{ min: 0 }}
                                     fullWidth
+                                    placeholder="Ex: 10"
                                     InputProps={{
                                         startAdornment: (
                                             <NumbersIcon sx={{ mr: 1, color: 'action.active' }} />
@@ -173,6 +211,7 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                     onChange={handleChange}
                                     required
                                     fullWidth
+                                    placeholder="Ex: K1"
                                     InputProps={{
                                         startAdornment: (
                                             <PlaceIcon sx={{ mr: 1, color: 'action.active' }} />
@@ -195,12 +234,20 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                     </button>
                     <button
                         onClick={handleSubmit}
-                        disabled={loading}
-                        className="bg-lime-500 p-2 px-6 rounded cursor-pointer text-white font-semibold hover:font-black transition-all"
+                        disabled={formData.location === '' || formData === null}
+                        className="bg-lime-500 p-2 px-6 rounded cursor-pointer text-white font-semibold hover:font-black transition-all disabled:opacity-50"
                     >
                         {loading ? <CircularProgress size={24} /> : "Adicionar"}
                     </button>
                 </div>
+                <ShortcutListener
+                    keyTrigger="Enter"
+                    onShortcut={() => {
+                        if (formData.location !== "" && formData !== null) {
+                            handleSubmit();
+                        }
+                    }}
+                />
             </div>
         </Modal>
     );

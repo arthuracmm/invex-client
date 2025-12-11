@@ -5,6 +5,7 @@ import { Product } from "../../types/Products";
 import { ProductService } from "../../service/products/productService";
 import AddProductModal from "./AddProductModal";
 import AddIcon from '@mui/icons-material/Add';
+import ShortcutListener from "@/src/ui/ShortcutListener";
 
 interface ProductContentProps{
     darkMode:boolean | null
@@ -46,6 +47,7 @@ export default function ProductContent({darkMode} : ProductContentProps) {
                 onClose={() => setIsAddModalOpen(false)}
                 onSuccess={fetchProducts}
             />
+            <ShortcutListener onShortcut={() => setIsAddModalOpen(true)} />
         </div>
     )
 }

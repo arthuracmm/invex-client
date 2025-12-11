@@ -10,8 +10,6 @@ import YardIcon from '@mui/icons-material/Yard';
 import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
 import OutboundIcon from '@mui/icons-material/Outbound';
 import OutboundOutlinedIcon from '@mui/icons-material/OutboundOutlined';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-import InventoryIcon from '@mui/icons-material/Inventory';
 import { ChevronRight, Router } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
@@ -24,6 +22,8 @@ import { Avatar, Chip, Divider, Popover, Tooltip } from '@mui/material';
 import { LogOut } from 'lucide-react';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 interface SidebarProps {
     activeTab: string;
@@ -134,6 +134,14 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
             label: 'output',
             icon: <OutboundIcon />,
             iconOutlined: <OutboundOutlinedIcon />
+        },
+        {
+            type: 'item',
+            name: 'Configurações',
+            title: 'Configurações gerais do sistema',
+            label: 'settings',
+            icon: <SettingsIcon />,
+            iconOutlined: <SettingsOutlinedIcon />
         }
     ]
 
