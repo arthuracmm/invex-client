@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { AuthService } from "../service/auth/authService";
 import api from "../service/auth/api";
+import { Automations } from "../types/EstablishmentData";
 
 interface Establishment {
   adress: string
@@ -18,6 +19,7 @@ interface Establishment {
   neighborhood: string
   number: string
   type: string
+  automations: Automations[]
 }
 
 interface User {

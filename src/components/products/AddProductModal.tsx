@@ -47,7 +47,10 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]: name === "quantMin" ? Number(value) : value,
+            [name]:
+                name === "quantMin" ? Number(value) :
+                    name === "shortName" || name === "unitMeasure" ? value.toUpperCase() :
+                        value,
         }));
     };
 
@@ -106,6 +109,19 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
                                     InputProps={{
                                         startAdornment: <ParkIcon sx={{ mr: 1, color: 'action.active' }} />
                                     }}
+                                    sx={{
+                                        '& label.Mui-focused': {
+                                            color: '#0d581dff',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#ccccccff',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#116b2cff !important',
+                                            },
+                                        },
+                                    }}
                                 />
 
                                 <TextField
@@ -118,6 +134,19 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
                                     InputProps={{
                                         startAdornment: <MeasureIcon sx={{ mr: 1, color: 'action.active' }} />
                                     }}
+                                    sx={{
+                                        '& label.Mui-focused': {
+                                            color: '#0d581dff',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#ccccccff',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#116b2cff !important',
+                                            },
+                                        },
+                                    }}
                                 />
 
                                 <TextField
@@ -129,6 +158,19 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
                                     required
                                     InputProps={{
                                         startAdornment: <DescriptionIcon sx={{ mr: 1, color: 'action.active' }} />
+                                    }}
+                                    sx={{
+                                        '& label.Mui-focused': {
+                                            color: '#0d581dff',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#ccccccff',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#116b2cff !important',
+                                            },
+                                        },
                                     }}
                                 />
 
@@ -143,6 +185,19 @@ export default function AddProductModal({ open, onClose, onSuccess }: AddProduct
                                     inputProps={{ min: 0 }}
                                     InputProps={{
                                         startAdornment: <NumbersIcon sx={{ mr: 1, color: 'action.active' }} />
+                                    }}
+                                    sx={{
+                                        '& label.Mui-focused': {
+                                            color: '#0d581dff',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#ccccccff',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#116b2cff !important',
+                                            },
+                                        },
                                     }}
                                 />
                             </div>

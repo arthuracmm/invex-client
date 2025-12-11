@@ -180,6 +180,19 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                                     </>
                                                 ),
                                             }}
+                                            sx={{
+                                                '& label.Mui-focused': {
+                                                    color: '#0d581dff',
+                                                },
+                                                '& .MuiOutlinedInput-root': {
+                                                    '& fieldset': {
+                                                        borderColor: '#ccccccff',
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: '#116b2cff !important',
+                                                    },
+                                                },
+                                            }}
                                         />
                                     )}
                                 />
@@ -202,6 +215,19 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                             <NumbersIcon sx={{ mr: 1, color: 'action.active' }} />
                                         )
                                     }}
+                                    sx={{
+                                        '& label.Mui-focused': {
+                                            color: '#0d581dff',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#ccccccff',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#116b2cff !important',
+                                            },
+                                        },
+                                    }}
                                 />
 
                                 <TextField
@@ -216,6 +242,19 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                         startAdornment: (
                                             <PlaceIcon sx={{ mr: 1, color: 'action.active' }} />
                                         )
+                                    }}
+                                    sx={{
+                                        '& label.Mui-focused': {
+                                            color: '#0d581dff',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#ccccccff',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#116b2cff !important',
+                                            },
+                                        },
                                     }}
                                 />
 
