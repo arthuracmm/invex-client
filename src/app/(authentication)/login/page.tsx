@@ -127,7 +127,7 @@ export default function LoginPage() {
                                 style={{
                                     backgroundImage: isLoading
                                         ? 'none'
-                                        : `linear-gradient(90deg, #00BC7D, #236851, #00BD7E, #1F3D33`,
+                                        : `linear-gradient(90deg, #1ed83dff, #3dbdf0ff, #00BD7E, #1F3D33`,
                                     backgroundSize: '200% 100%',
                                     backgroundPosition: 'left',
                                     transition: 'background-position 0.5s ease',
