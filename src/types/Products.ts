@@ -5,7 +5,7 @@ export interface Product {
     shortName: string;
     fullName: string;
     unitMeasure: string;
-    quantMin: number;
-    
+    quantMin: number | undefined;
+
     inventories?: Inventory[];
 }

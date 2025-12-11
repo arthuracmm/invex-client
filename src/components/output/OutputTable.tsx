@@ -31,7 +31,7 @@ interface OutputTableProps {
 }
 
 export default function OutputTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize, handleOpenModal}: OutputTableProps) {
-    const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName">("shortName");
+    const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName" | ''>("");
     const [order, setOrder] = useState<Order>("asc");
     const [sortedMovimentations, setSortedMovimentations] = useState<Movimentation[]>([]);
 

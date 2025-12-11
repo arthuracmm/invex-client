@@ -26,11 +26,11 @@ interface EntryTableProps {
     setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
     totalPages: number
     pageSize: number
-    handleOpenModal: (product : Product) => void;
+    handleOpenModal: (product: Product) => void;
 }
 
 export default function EntryTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize, handleOpenModal }: EntryTableProps) {
-    const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName">("shortName");
+    const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName" | ''>("");
     const [order, setOrder] = useState<Order>("asc");
     const [sortedMovimentations, setSortedMovimentations] = useState<Movimentation[]>([]);
 
