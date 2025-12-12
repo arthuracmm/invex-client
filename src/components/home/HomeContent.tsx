@@ -31,10 +31,9 @@ export default function HomeContent({ refreshKey, darkMode }: HomeContentProps) 
             <div className="flex w-full md:justify-between items-center justify-center ">
                 <h1 className={`hidden md:flex text-4xl p-4 px-10 my-5 font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'}`}>Dashboards</h1>
                 <h1 className={`flex md:hidden text-4xl p-4 px-10 font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'}`}>Resiarte</h1>
-                <div className="h-full w-[40%] hidden md:flex">
-                    <div className=" w-full items-center justify-end pr-10">
-                        <h1 className='font-extrabold text-4xl num-font'>Ultimo mês<span className='font-light text-2xl'>/{formattedMonth}</span></h1>
-                    </div>
+                
+                <div className="hidden md:flex h-full w-full items-center justify-end pr-10">
+                    <h1 className='font-extrabold text-4xl num-font'>Ultimo mês<span className='font-light text-2xl'>/{formattedMonth}</span></h1>
                 </div>
             </div>
 
@@ -46,8 +45,8 @@ export default function HomeContent({ refreshKey, darkMode }: HomeContentProps) 
             </div>
 
             <div className="flex md:hidden flex-col gap-5 h-full overflow-y-auto overflow-x-hidden m-4 items-center justify-center">
-                 <img src="images/akin-NR.png" alt="" className="object-center w-[80%] aspect-square" />
-                 <p className="text-center text-xs text-zinc-500">Selecione um item no menu ao lado para prosseguir.</p>
+                <img src="images/akin-NR.png" alt="" className="object-center w-[80%] aspect-square" />
+                <p className="text-center text-xs text-zinc-500">Selecione um item no menu ao lado para prosseguir.</p>
             </div>
         </div>
     )

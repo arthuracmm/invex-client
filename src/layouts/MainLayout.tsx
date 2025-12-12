@@ -1,16 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '../context/AuthContext';
-import Sidebar from '../components/Sidebar';
+import { usePathname } from 'next/navigation';
 import Loading from '../components/Loading';
 import HomeContent from '../components/home/HomeContent';
 import ProductContent from '../components/products/ProductsContent';
 import EntryContent from '../components/entry/EntryContent';
 import OutputContent from '../components/output/OutputContent';
-import { DarkMode } from '@mui/icons-material';
 import SettingsContent from '../components/settings/SettingContent';
+import Sidebar from '../components/sidebar/Sidebar';
 
 interface MainLayoutProps {
     activeTab: string;

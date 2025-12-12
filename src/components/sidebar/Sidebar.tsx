@@ -1,18 +1,8 @@
 "use client";
 
-import HomeIcon from '@mui/icons-material/Home';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import YardIcon from '@mui/icons-material/Yard';
-import YardOutlinedIcon from '@mui/icons-material/YardOutlined';
-import OutboundIcon from '@mui/icons-material/Outbound';
-import OutboundOutlinedIcon from '@mui/icons-material/OutboundOutlined';
-import { ChevronRight, Router } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../context/AuthContext';
 import { useEffect, useState } from 'react';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import WorkspacesIcon from '@mui/icons-material/Workspaces';
@@ -22,8 +12,9 @@ import { Avatar, Chip, Divider, Popover, Tooltip } from '@mui/material';
 import { LogOut } from 'lucide-react';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import SettingsIcon from '@mui/icons-material/Settings';
+import SelectContent from './SelectContent';
+import { useAuth } from '@/src/context/AuthContext';
+import SideBarItem, { SideBarArrayitems } from './SideBarItem';
 
 interface SidebarProps {
     activeTab: string;
@@ -39,7 +30,10 @@ interface SidebarProps {
 }
 
 
-export default function Sidebar({ activeTab, setActiveTab, setTitle, module, setModule, setRefreshKey, sidebarOpen, setSidebarOpen, darkMode, setDarkMode }: SidebarProps) {
+export default function Sidebar({ activeTab, setActiveTab, setTitle, setRefreshKey, sidebarOpen, setSidebarOpen, darkMode, setDarkMode }: SidebarProps) {
+
+    const [serviceSelected, setServiceSelected] = useState<string>('')
+
     useEffect(() => {
         const savedState = localStorage.getItem("sidebarOpen");
         if (savedState !== null) {
@@ -102,50 +96,6 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
     const openPopover = Boolean(anchorEl);
     const id = openPopover ? 'simple-popover' : undefined;
 
-    const items = [
-        {
-            type: 'item',
-            name: 'Home',
-            title: 'Pagina Inicial',
-            label: 'home',
-            icon: <HomeIcon />,
-            iconOutlined: <HomeOutlinedIcon />
-        },
-        {
-            type: 'item',
-            name: 'Produtos',
-            title: 'Gestão dos agendamentos dos pacientes',
-            label: 'products',
-            icon: <YardIcon />,
-            iconOutlined: <YardOutlinedIcon />
-        },
-        {
-            type: 'item',
-            name: 'Entrada',
-            title: 'Gestão de agenda dos profissionais',
-            label: 'entry',
-            icon: <AddCircleIcon />,
-            iconOutlined: <AddCircleOutlineOutlinedIcon />
-        },
-        {
-            type: 'item',
-            name: 'Saida',
-            title: 'Gestão de agenda dos profissionais',
-            label: 'output',
-            icon: <OutboundIcon />,
-            iconOutlined: <OutboundOutlinedIcon />
-        },
-        {
-            type: 'item',
-            name: 'Configurações',
-            title: 'Configurações gerais do sistema',
-            label: 'settings',
-            icon: <SettingsIcon />,
-            iconOutlined: <SettingsOutlinedIcon />
-        }
-    ]
-
-
     return (
         <div className={`flex flex-col ${sidebarOpen ? 'w-80' : 'w-24'} h-full overflow-hidden ${darkMode ? 'text-white' : 'text-zinc-700'}  transition-all`}>
             <div className={`flex ${!sidebarOpen && 'flex-col'} justify-between m-4 items-center gap-4 transition-all`}>
@@ -181,63 +131,16 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, module, set
             </div>
             <Divider />
             <div className="flex flex-col gap-2 mt-5 m-4 items-center">
-                {items.map((i) => (
-                    <div
-                        className={`flex flex-col w-full ${i.label === "home" && "hidden md:flex"}`}
-                        key={i.label}
-                    >
-                        <div
-                            className={`flex w-full p-2 rounded-lg gap- cursor-pointer transition-all border 
-                                ${(activeTab === i.label || module === i.label) ? `${darkMode ? 'bg-lime-900 text-lime-300 border-lime-300' : 'bg-lime-100 text-lime-600 border-lime-300'}` : `${darkMode ? 'border-zinc-400' : 'border-zinc-300'}`}
-                                ${sidebarOpen ? 'w-full' : 'w-0 justify-center'}
-                                `}
-                            onClick={() => {
-                                if (i.type === 'module') {
-                                    if (module !== i.label) {
-                                        setModule(i.label)
-                                    } else {
-                                        setModule('')
-                                    }
-                                } else {
-                                    setModule('')
-                                    setActiveTab(i.label)
-                                    if (i.title) {
-                                        setTitle(i.title)
-                                        router.push(`/${i.label}`)
-                                    } else {
-                                        router.push(`/${i.label}`)
-                                    }
-                                }
-                            }
-                            }
-                        >
-                            <Tooltip title={!sidebarOpen && i.name} arrow key={i.label}>
-                                <div className={`flex w-full  items-center 
-                                    ${i.type === 'module' && 'justify-between'}
-                                    ${(i.type === 'item' && !sidebarOpen) && 'justify-center'}
-                                    `}>
-                                    <div className="flex h-full gap-2">
-                                        {(activeTab === i.label || module === i.label) ? i.icon : i.iconOutlined}
-
-                                        {sidebarOpen && (
-                                            <>
-                                                <Divider
-                                                    orientation='vertical'
-                                                    sx={{
-                                                        borderColor: activeTab === i.label ? '#bef264' : undefined,
-                                                    }}
-                                                />
-                                                <p>{i.name}</p>
-                                            </>
-                                        )}
-                                    </div>
-                                    {i.type === 'module' && (
-                                        <ChevronRight size={18} className={`${module === i.label ? 'rotate-90' : ''} transition-all ml-auto`} />
-                                    )}
-                                </div>
-                            </Tooltip>
-                        </div>
-                    </div >
+                <SelectContent serviceSelected={serviceSelected} setServiceSelected={setServiceSelected} sidebarOpen={sidebarOpen}/>
+                {SideBarArrayitems.filter((item) => item.service === serviceSelected).map((i) => (
+                    <SideBarItem
+                        item={i}
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        sidebarOpen={sidebarOpen}
+                        darkMode={darkMode}
+                        setTitle={setTitle}
+                    />
                 ))}
 
             </div>
