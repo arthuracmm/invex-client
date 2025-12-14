@@ -1,9 +1,13 @@
-import { Product } from "../types/Products";
 import jsPDF from "jspdf";
+import { Product } from "../types/Products";
 
-export default async function handlePrintPdf(
-    product: Product,
-    copies: number = 1
+type PrintItem = {
+    product: Product;
+    quantity: number;
+};
+
+export default async function handlePrintStockPdf(
+    items: PrintItem[]
 ) {
     const width = 50;
     const height = 30;
@@ -25,23 +29,28 @@ export default async function handlePrintPdf(
         });
     };
 
-    const qrBase64 = await imageToBase64(
-        `/api/barcode?text=${product.id}`
-    );
+    let isFirstPage = true;
 
-    for (let i = 0; i < copies; i++) {
-        if (i > 0) doc.addPage();
+    for (const item of items) {
+        const qrBase64 = await imageToBase64(
+            `/api/barcode?text=${item.product.id}`
+        );
 
-        doc.setFontSize(8);
-        doc.text(`${product.shortName} - ${product.fullName}`, width / 2, 6, {
-            align: "center",
-        });
+        for (let i = 0; i < item.quantity; i++) {
+            if (!isFirstPage) doc.addPage();
+            isFirstPage = false;
 
-        const qrSize = 20;
-        const qrX = (width - qrSize) / 2;
-        const qrY = 8;
+            doc.setFontSize(8);
+            doc.text(`${item.product.shortName} - ${item.product.fullName}`, width / 2, 6, {
+                align: "center",
+            });
 
-        doc.addImage(qrBase64, "PNG", qrX, qrY, qrSize, qrSize);
+            const qrSize = 20;
+            const qrX = (width - qrSize) / 2;
+            const qrY = 8;
+
+            doc.addImage(qrBase64, "PNG", qrX, qrY, qrSize, qrSize);
+        }
     }
 
     doc.autoPrint();

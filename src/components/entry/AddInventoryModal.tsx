@@ -15,7 +15,12 @@ import { X } from "lucide-react";
 import ParkIcon from '@mui/icons-material/Park';
 import NumbersIcon from '@mui/icons-material/Numbers';
 import PlaceIcon from '@mui/icons-material/Place';
-import ShortcutListener from "@/src/ui/ShortcutListener";
+import ShortcutListener from "@/src/ui/ShortcutListener"
+
+type AddedItem = {
+    product: Product;
+    quantity: number;
+};
 
 interface AddInventoryModalProps {
     open: boolean;
@@ -23,9 +28,12 @@ interface AddInventoryModalProps {
     product: Product | null;
     products: Product[];
     onSuccess: () => void;
+    printReady: boolean
+    setPrintReady: React.Dispatch<React.SetStateAction<boolean>>;
+    setArrayAddItems: React.Dispatch<React.SetStateAction<AddedItem[]>>;
 }
 
-export default function AddInventoryModal({ open, onClose, product, products, onSuccess }: AddInventoryModalProps) {
+export default function AddInventoryModal({ open, onClose, product, products, onSuccess, printReady, setPrintReady, setArrayAddItems }: AddInventoryModalProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -94,6 +102,18 @@ export default function AddInventoryModal({ open, onClose, product, products, on
 
             onSuccess();
             onClose();
+
+            setArrayAddItems((prev) => [
+                ...prev,
+                {
+                    product: selectedProduct,
+                    quantity: formData.quantity!,
+                },
+            ]);
+
+            if (!printReady) setPrintReady(true);
+
+            if (!printReady) setPrintReady(true)
 
             setFormData({
                 quantity: undefined,

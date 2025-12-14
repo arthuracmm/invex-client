@@ -1,4 +1,4 @@
-import { Divider, Button } from "@mui/material";
+import { Divider, Modal } from "@mui/material";
 import EntryTable from "./EntryTable";
 import { Product } from "../../types/Products";
 import { useState, useEffect } from "react";
@@ -11,13 +11,25 @@ import Loading from "../Loading";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import MobileScanner from "../MobileScanner";
 import ShortcutListener from "@/src/ui/ShortcutListener";
+import PrintIcon from '@mui/icons-material/Print';
+import handlePrintStockPdf from "@/src/utils/HandlePrint";
 
 interface EntryContentProps {
     darkMode: boolean | null
 }
 
+type AddedItem = {
+    product: Product;
+    quantity: number;
+};
+
 export default function EntryContent({ darkMode }: EntryContentProps) {
     const [loading, setLoading] = useState(false);
+
+    const [printReady, setPrintReady] = useState<boolean>(false)
+    const [isModalPrintOpen, setIsModalPrintOpen] = useState<boolean>(false)
+
+    const [arrayAddItems, setArrayAddItems] = useState<AddedItem[] | []>([])
 
     const [products, setProducts] = useState<Product[]>([]);
     const [movimentation, setMovimentation] = useState<Movimentation[]>([]);
@@ -59,15 +71,25 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
         fetchData();
     }, [currentPage, pageSize]);
 
+    useEffect(() => {
+        if (printReady) {
+            setIsModalPrintOpen(true);
+        }
+    }, [printReady]);
+
     const handleOpenModal = (product: Product) => {
         setSelectedProduct(product);
         setIsModalOpen(true);
     };
 
-    const handleCloseModal = () => {
+    const handleCloseAddModal = () => {
         setIsModalOpen(false);
         setSelectedProduct(null);
     };
+
+    const handleClosePrintModal = () => {
+        setIsModalPrintOpen(false);
+    }
 
     const handleSuccess = () => {
         fetchData();
@@ -116,6 +138,57 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                 </button>
             </div>
 
+            {printReady && (
+                <button
+                    onClick={() => setIsModalPrintOpen(true)}
+                    className="fixed bottom-4 right-4 flex bg-lime-500 hover:bg-lime-600 w-15 h-15 rounded-full items-center justify-center text-white cursor-pointer shadow">
+                    <PrintIcon />
+                </button>
+            )}
+
+            <Modal
+                open={isModalPrintOpen}
+                onClose={handleClosePrintModal}
+                className="flex items-center justify-center text-zinc-700"
+            >
+                <div className="flex flex-col bg-white shadow-2xl md:w-[50%] md:h-[50%] rounded-2xl outline-none overflow-hidden relative pb-12 md:pb-0 justify-center items-center gap-4">
+                    <h1 className="md:text-3xl text-2xl font-bold text-zinc-700">Deseja emitir o PDF agora?</h1>
+                    <div className="flex flex-col items-center gap-4">
+                        <button
+                            className="flex p-2 px-8 gap-2 w-fit bg-lime-500 hover:bg-lime-600 text-white rounded-xl items-center cursor-pointer"
+                            onClick={() => {
+                                setPrintReady(false)
+                                setArrayAddItems([])
+                                handlePrintStockPdf(arrayAddItems)
+                                handleClosePrintModal
+                            }
+                            }
+                        >
+                            <div className="flex rounded-xl border border-white/50 p-2 font-bold">
+                                Enter
+                            </div>
+                            <p className="font-bold">Sim</p>
+                        </button>
+
+                        <button
+                            className="flex p-2 px-8 gap-2 w-fit bg-zinc-300 hover:bg-zinc-400/60  rounded-xl items-center cursor-pointer"
+                            onClick={handleClosePrintModal}
+                        >
+                            <div className="flex rounded-xl border border-black/20 p-2 font-bold">
+                                Esc
+                            </div>
+                            <p className="font-bold">Continuar Adicionando</p>
+                        </button>
+                    </div>
+                    <ShortcutListener keyTrigger="Enter" onShortcut={() => {
+                        setPrintReady(false)
+                        setArrayAddItems([])
+                        handlePrintStockPdf(arrayAddItems)
+                        handleClosePrintModal
+                    }} />
+                </div>
+            </Modal>
+
             {scannerOpen && (
                 <MobileScanner
                     onDetected={handleCodeDetected}
@@ -125,10 +198,13 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
 
             <AddInventoryModal
                 open={isModalOpen}
-                onClose={handleCloseModal}
+                onClose={handleCloseAddModal}
                 product={selectedProduct}
                 products={products}
+                printReady={printReady}
+                setPrintReady={setPrintReady}
                 onSuccess={handleSuccess}
+                setArrayAddItems={setArrayAddItems}
             />
 
             <ShortcutListener onShortcut={() => setIsModalOpen(true)} />
