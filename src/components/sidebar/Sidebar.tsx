@@ -130,10 +130,11 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, setRefreshK
                 </div>
             </div>
             <Divider />
-            <div className="flex flex-col gap-2 mt-5 m-4 items-center">
-                <SelectContent serviceSelected={serviceSelected} setServiceSelected={setServiceSelected} sidebarOpen={sidebarOpen}/>
+            <div className="flex flex-col gap-2 m-4 items-center">
+                <SelectContent serviceSelected={serviceSelected} setServiceSelected={setServiceSelected} sidebarOpen={sidebarOpen} />
                 {SideBarArrayitems.filter((item) => item.service === serviceSelected).map((i) => (
                     <SideBarItem
+                        key={i.label}
                         item={i}
                         activeTab={activeTab}
                         setActiveTab={setActiveTab}

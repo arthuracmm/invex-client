@@ -86,7 +86,7 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                 </button>
             </div>
             <Divider />
-            <div className="hidden md:flex h-full p-4">
+            <div className="hidden md:flex h-full p-4 overflow-hidden">
                 <EntryTable
                     movimentation={movimentation}
                     darkMode={darkMode}

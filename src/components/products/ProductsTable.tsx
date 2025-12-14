@@ -13,8 +13,9 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import EditNoteIcon from '@mui/icons-material/EditNote';
+import PrintIcon from '@mui/icons-material/Print';
 import { ChevronRight } from "lucide-react";
+import handlePrintPdf from "@/src/utils/HandlePrint";
 
 type Order = "asc" | "desc";
 
@@ -198,20 +199,37 @@ export default function ProductsTable({ products, darkMode }: ProductsTableProps
                                     {selectedProduct === product.id && (
                                         <TableRow>
                                             <TableCell colSpan={7}>
-                                                <div className=" rounded">
-                                                    {product.inventories?.map((item) => (
-                                                        <div className="flex gap-2" key={item.id}>
-                                                            <p className="font-bold">{item.location}</p>
-                                                            <p >{item.quantity}</p>
+                                                <div className="flex w-full  justify-between items-center">
+                                                    <div className="flex flex-col text-xl">
+                                                        <div className="flex items-center gap-2">
+                                                            <p className="font-bold">Quantidade Total :</p>
+                                                            <p className="">
+                                                                {product.inventories?.reduce((total, prod) => total + prod.quantity, 0)}
+                                                            </p>
                                                         </div>
-                                                    )
-                                                    )}
-                                                    <div className="mt-2">
+                                                        {product.inventories?.map((item) => (
+                                                            <div className="flex gap-2" key={item.id}>
+                                                                <p className="font-bold">{item.location}</p>
+                                                                <p >{item.quantity}</p>
+                                                            </div>
+                                                        )
+                                                        )}
+                                                    </div>
+                                                    <div className="flex items-center">
                                                         <img
                                                             src={`/api/barcode?text=${product.id}`}
                                                             alt={`Código de barras de ${product.shortName}`}
                                                             className="h-40"
                                                         />
+                                                        <Tooltip arrow title={`Imprimir ${product.fullName}`}>
+                                                            <button
+                                                                onClick={() => handlePrintPdf(product)}
+                                                                className="bg-lime-500 h-10 w-10 rounded text-white cursor-pointer"
+                                                            >
+                                                                <PrintIcon />
+                                                            </button>
+                                                        </Tooltip>
+
                                                     </div>
                                                 </div>
                                             </TableCell>

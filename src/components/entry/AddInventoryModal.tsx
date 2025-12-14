@@ -164,24 +164,16 @@ export default function AddInventoryModal({ open, onClose, product, products, on
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
+                                            inputRef={(el) => {
+                                                autoCompleteInputRef.current = el;
+                                                if (params.InputProps.ref) {
+                                                    (params.InputProps.ref as any).current = el;
+                                                }
+                                            }}
                                             label="Produto"
+                                            placeholder="Pesquise por nome..."
                                             fullWidth
                                             required={!product}
-                                            sx={{
-                                                // Cor da label quando focado
-                                                '& label.Mui-focused': {
-                                                    color: '#0d581dff',  // <-- cor da label focada
-                                                },
-
-                                                '& .MuiOutlinedInput-root': {
-                                                    '& fieldset': {
-                                                        borderColor: '#ccccccff', // cor padrão sem foco
-                                                    },
-                                                    '&.Mui-focused fieldset': {
-                                                        borderColor: '#116b2cff !important', // <-- cor da Borda no foco
-                                                    },
-                                                },
-                                            }}
                                             InputProps={{
                                                 ...params.InputProps,
                                                 startAdornment: (
@@ -191,9 +183,20 @@ export default function AddInventoryModal({ open, onClose, product, products, on
                                                     </>
                                                 ),
                                             }}
+                                            sx={{
+                                                '& label.Mui-focused': {
+                                                    color: '#0d581dff',
+                                                },
+                                                '& .MuiOutlinedInput-root': {
+                                                    '& fieldset': {
+                                                        borderColor: '#ccccccff',
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: '#116b2cff !important',
+                                                    },
+                                                },
+                                            }}
                                         />
-
-
                                     )}
                                 />
 
