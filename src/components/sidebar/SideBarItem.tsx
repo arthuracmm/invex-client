@@ -1,4 +1,4 @@
-import { Divider, Tooltip } from "@mui/material"
+import { Badge, Divider, Tooltip } from "@mui/material"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import YardIcon from '@mui/icons-material/Yard';
@@ -9,8 +9,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { JSX } from "react";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import { JSX, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { NotificationsService } from "@/src/service/notifications/notificationsService";
 
 export const SideBarArrayitems = [
     {
@@ -51,6 +54,15 @@ export const SideBarArrayitems = [
     },
     {
         type: 'item',
+        name: 'Notificações',
+        title: 'Notificações do estoque',
+        label: 'notifications',
+        service: 'stock',
+        icon: <NotificationsIcon />,
+        iconOutlined: <NotificationsNoneOutlinedIcon />
+    },
+    {
+        type: 'item',
         name: 'Configurações',
         title: 'Configurações gerais do sistema',
         label: 'settings',
@@ -87,6 +99,22 @@ export default function SideBarItem({
 }: SideBarItemProps) {
     const router = useRouter();
 
+    const [hasNotification, setHasNotification] = useState<boolean>(false)
+
+    const fetchNotifications = async () => {
+        try {
+            const response = await NotificationsService.hasNotification()
+            setHasNotification(response);
+            console.log(response)
+        } catch (error) {
+            console.error("Failed to fetch data", error);
+        }
+    }
+
+    useEffect(() => {
+        fetchNotifications();
+    }, []);
+
     return (
         <div
             className={`flex flex-col w-full ${item.label === "home" && "hidden md:flex"}`} key={item.label}
@@ -117,7 +145,18 @@ export default function SideBarItem({
                         `}
                     >
                         <div className="flex h-full gap-2">
-                            {activeTab === item.label ? item.icon : item.iconOutlined}
+                            <Badge
+                                variant="dot"
+                                invisible={!(item.label === 'notifications' && hasNotification)}
+                                sx={{
+                                    '& .MuiBadge-dot': {
+                                        backgroundColor: '#84cc16',
+                                    },
+                                }}
+                            >
+                                {activeTab === item.label ? item.icon : item.iconOutlined}
+                            </Badge>
+
 
                             {sidebarOpen && (
                                 <>

@@ -9,6 +9,7 @@ import EntryContent from '../components/entry/EntryContent';
 import OutputContent from '../components/output/OutputContent';
 import SettingsContent from '../components/settings/SettingContent';
 import Sidebar from '../components/sidebar/Sidebar';
+import NotificationsContent from '../components/notifications/NotificationContent';
 
 interface MainLayoutProps {
     activeTab: string;
@@ -38,6 +39,8 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
                 return <OutputContent darkMode={darkMode}/>;
             case "settings":
                 return <SettingsContent darkMode={darkMode}/>;
+            case "notifications":
+                return <NotificationsContent darkMode={darkMode}/>;
             default:
                 return null;
         }
