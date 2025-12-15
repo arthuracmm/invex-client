@@ -22,14 +22,25 @@ interface SubInventoryModalProps {
     product: Product | null;
     products: Product[];
     onSuccess: () => void;
+    darkMode: boolean | null
 }
 
-export default function SubInventoryModal({ open, onClose, product, products, onSuccess }: SubInventoryModalProps) {
+export default function SubInventoryModal({ open, onClose, product, products, onSuccess, darkMode }: SubInventoryModalProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
+    const inputColors = {
+        icon: darkMode ? '#a1a1aa' : '#52525b',
+        label: darkMode ? '#d4d4d8' : '#3f3f46',
+        text: darkMode ? '#e4e4e7' : '#27272a',
+        placeholder: darkMode ? '#71717a' : '#a1a1aa',
+        border: darkMode ? '#3f3f46' : '#d4d4d8',
+        focus: '#22c55e', 
+    };
+
     const autoCompleteInputRef = useRef<HTMLInputElement | null>(null);
+
 
     useEffect(() => {
         if (open) {
@@ -113,17 +124,17 @@ export default function SubInventoryModal({ open, onClose, product, products, on
             onClose={onClose}
             className="flex items-center justify-center text-zinc-700"
         >
-            <div className="flex flex-col bg-white shadow-2xl md:w-[60%] md:h-[60%] rounded-2xl outline-none overflow-hidden relative pb-12 md:pb-0">
+            <div className={`flex flex-col ${darkMode ? 'bg-zinc-800' : 'bg-white'} shadow-2xl md:w-[60%] md:h-[60%] rounded-2xl outline-none overflow-hidden relative pb-12 md:pb-0`}>
                 <div className="flex p-8 px-10 w-full md:justify-between justify-center items-center ">
-                    <h1 className="md:text-3xl text-2xl font-bold text-zinc-700">Nova saida do estoque</h1>
+                    <h1 className={`md:text-3xl text-2xl font-bold ${darkMode ? 'text-zinc-200' : 'text-zinc-700'}`}>Nova saida do estoque</h1>
                     <button
                         onClick={() => {
                             onClose()
                         }
                         }
-                        className="cursor-pointer hover:bg-emerald-50 rounded-full p-2 transition-colors box-content"
+                        className={`cursor-pointer ${darkMode ? 'hover:bg-lime-900 ' : 'hover:bg-lime-50 '}rounded-full p-2 transition-colors box-content`}
                     >
-                        <X className="hidden md:flex" />
+                        <X className={`${darkMode ? 'text-zinc-200' : 'text-zinc-700'} hidden md:flex`} />
                     </button>
                 </div>
                 <Divider />
@@ -158,6 +169,14 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                             }
                                         }
                                     }}
+                                    componentsProps={{
+                                        paper: {
+                                            sx: {
+                                                backgroundColor: darkMode ? '#27272a' : '#ffffff',
+                                                color: darkMode ? '#d4d4d8' : '#3f3f46',
+                                            },
+                                        },
+                                    }}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -170,26 +189,43 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                             label="Produto"
                                             placeholder="Pesquise por nome..."
                                             fullWidth
-                                            required={!product}
                                             InputProps={{
                                                 ...params.InputProps,
                                                 startAdornment: (
                                                     <>
-                                                        <ParkIcon sx={{ mr: 1, color: 'action.active' }} />
+                                                        <ParkIcon
+                                                            sx={{
+                                                                mr: 1,
+                                                                color: inputColors.icon,
+                                                            }}
+                                                        />
                                                         {params.InputProps.startAdornment}
                                                     </>
                                                 ),
                                             }}
                                             sx={{
+                                                '& label': {
+                                                    color: inputColors.label,
+                                                },
                                                 '& label.Mui-focused': {
-                                                    color: '#0d581dff',
+                                                    color: inputColors.focus,
+                                                },
+                                                '& .MuiInputBase-input': {
+                                                    color: inputColors.text,
+                                                },
+                                                '& .MuiInputBase-input::placeholder': {
+                                                    color: inputColors.placeholder,
+                                                    opacity: 1,
                                                 },
                                                 '& .MuiOutlinedInput-root': {
                                                     '& fieldset': {
-                                                        borderColor: '#ccccccff',
+                                                        borderColor: inputColors.border,
+                                                    },
+                                                    '&:hover fieldset': {
+                                                        borderColor: inputColors.focus,
                                                     },
                                                     '&.Mui-focused fieldset': {
-                                                        borderColor: '#116b2cff !important',
+                                                        borderColor: inputColors.focus,
                                                     },
                                                 },
                                             }}
@@ -212,19 +248,35 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                     placeholder="Ex: 10"
                                     InputProps={{
                                         startAdornment: (
-                                            <NumbersIcon sx={{ mr: 1, color: 'action.active' }} />
+                                            <NumbersIcon sx={{
+                                                mr: 1,
+                                                color: inputColors.icon,
+                                            }} />
                                         )
                                     }}
                                     sx={{
+                                        '& label': {
+                                            color: inputColors.label,
+                                        },
                                         '& label.Mui-focused': {
-                                            color: '#0d581dff',
+                                            color: inputColors.focus,
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            color: inputColors.text,
+                                        },
+                                        '& .MuiInputBase-input::placeholder': {
+                                            color: inputColors.placeholder,
+                                            opacity: 1,
                                         },
                                         '& .MuiOutlinedInput-root': {
                                             '& fieldset': {
-                                                borderColor: '#ccccccff',
+                                                borderColor: inputColors.border,
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: inputColors.focus,
                                             },
                                             '&.Mui-focused fieldset': {
-                                                borderColor: '#116b2cff !important',
+                                                borderColor: inputColors.focus,
                                             },
                                         },
                                     }}
@@ -240,19 +292,35 @@ export default function SubInventoryModal({ open, onClose, product, products, on
                                     placeholder="Ex: K1"
                                     InputProps={{
                                         startAdornment: (
-                                            <PlaceIcon sx={{ mr: 1, color: 'action.active' }} />
+                                            <PlaceIcon sx={{
+                                                mr: 1,
+                                                color: inputColors.icon,
+                                            }} />
                                         )
                                     }}
                                     sx={{
+                                        '& label': {
+                                            color: inputColors.label,
+                                        },
                                         '& label.Mui-focused': {
-                                            color: '#0d581dff',
+                                            color: inputColors.focus,
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            color: inputColors.text,
+                                        },
+                                        '& .MuiInputBase-input::placeholder': {
+                                            color: inputColors.placeholder,
+                                            opacity: 1,
                                         },
                                         '& .MuiOutlinedInput-root': {
                                             '& fieldset': {
-                                                borderColor: '#ccccccff',
+                                                borderColor: inputColors.border,
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: inputColors.focus,
                                             },
                                             '&.Mui-focused fieldset': {
-                                                borderColor: '#116b2cff !important',
+                                                borderColor: inputColors.focus,
                                             },
                                         },
                                     }}

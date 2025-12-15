@@ -68,8 +68,8 @@ export default function PieChartsDashboards({ refreshKey, darkMode }: PieChartsD
         <div className="flex flex-1 flex-col items-center gap-8">
             <div className="flex w-full justify-center gap-6 ">
                 {chartsData.map((chart, index) => (
-                    <div key={index} className={`flex flex-col items-center border ${darkMode ? 'border-zinc-600' : 'border-zinc-300'} rounded-xl w-full pt-4 pb-2 relative transition-colors`}>
-                        <div className={`flex absolute left-0 top-0 ${darkMode ? 'bg-lime-700 text-white' : 'bg-lime-100 text-lime-500'} p-4 rounded-br-xl rounded-tl-xl transition-colors`}>
+                    <div key={index} className={`flex flex-col items-center border ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} rounded-xl w-full pt-4 pb-2 relative transition-colors`}>
+                        <div className={`flex absolute left-0 top-0 ${darkMode ? 'bg-lime-700 text-zinc-300' : 'bg-lime-100 text-lime-500'} p-4 rounded-br-xl rounded-tl-xl transition-colors`}>
                             {chart.icon}
                         </div>
                         <h2 className="font-bold text-lg">{chart.name}</h2>

@@ -31,7 +31,7 @@ export default function ProductContent({darkMode} : ProductContentProps) {
     return (
         <div className="flex h-full flex-col ">
             <div className="flex p-4 px-8 my-5 w-full justify-between items-center ">
-                <h1 className={`text-4xl font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'} `}>Produtos</h1>
+                <h1 className={`text-4xl font-extrabold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'} `}>Produtos</h1>
                 <button
                     className="flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow "
                     onClick={() => setIsAddModalOpen(true)}
@@ -46,6 +46,7 @@ export default function ProductContent({darkMode} : ProductContentProps) {
                 open={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
                 onSuccess={fetchProducts}
+                darkMode={darkMode}
             />
             <ShortcutListener onShortcut={() => setIsAddModalOpen(true)} />
         </div>

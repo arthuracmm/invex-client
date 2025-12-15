@@ -13,7 +13,7 @@ export default function MessagesDashboard({ darkMode }: MessagesDashboardProps) 
         <div className="flex flex-1 flex-col items-center gap-8">
             <div className="flex w-full justify-center gap-6">
                 <Tooltip title={'Total de mensagens enviadas pelo sistema'} arrow>
-                    <div className={`flex items-center border ${darkMode ? 'border-zinc-600' : 'border-zinc-300'} border-zinc-300 rounded-xl gap-4 overflow-hidden w-full`}>
+                    <div className={`flex items-center border ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} border-zinc-300 rounded-xl gap-4 overflow-hidden w-full`}>
                             <div className={`flex ${darkMode ? 'bg-lime-500' : 'bg-lime-300'} h-full aspect-square justify-center items-center`}>
                             <ForestIcon sx={{ fontSize: 70 }}  />
                         </div>
@@ -25,7 +25,7 @@ export default function MessagesDashboard({ darkMode }: MessagesDashboardProps) 
                 </Tooltip>
 
                 <Tooltip title={'Total de mensagens respondidas pelos pacientes'} arrow>
-                    <div className={`flex items-center border ${darkMode ? 'border-zinc-600' : 'border-zinc-300'} border-zinc-300 rounded-xl gap-4 overflow-hidden w-full`}>
+                    <div className={`flex items-center border ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} border-zinc-300 rounded-xl gap-4 overflow-hidden w-full`}>
                          <div className={`flex ${darkMode ? 'bg-lime-500' : 'bg-lime-300'} h-full aspect-square justify-center items-center`}>
                             <LowPriorityIcon sx={{ fontSize: 70 }} />
                         </div>
@@ -37,7 +37,7 @@ export default function MessagesDashboard({ darkMode }: MessagesDashboardProps) 
                 </Tooltip>
 
                 <Tooltip title={'Total de mensagens não respondidas pelos pacientes'} arrow>
-                    <div className={`flex items-center border ${darkMode ? 'border-zinc-600' : 'border-zinc-300'} border-zinc-300 rounded-xl gap-4 overflow-hidden w-full`}>
+                    <div className={`flex items-center border ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} border-zinc-300 rounded-xl gap-4 overflow-hidden w-full`}>
                          <div className={`flex ${darkMode ? 'bg-lime-500' : 'bg-lime-300'} h-full aspect-square justify-center items-center`}>
                             <LowPriorityIcon sx={{ fontSize: 70 }} />
                         </div>

@@ -29,8 +29,8 @@ export default function HomeContent({ refreshKey, darkMode }: HomeContentProps) 
     return (
         <div className="flex h-full flex-col ">
             <div className="flex w-full md:justify-between items-center justify-center ">
-                <h1 className={`hidden md:flex text-4xl p-4 px-10 my-5 font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'}`}>Dashboards</h1>
-                <h1 className={`flex md:hidden text-4xl p-4 px-10 font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'}`}>Resiarte</h1>
+                <h1 className={`hidden md:flex text-4xl p-4 px-10 my-5 font-extrabold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>Dashboards</h1>
+                <h1 className={`flex md:hidden text-4xl p-4 px-10 font-extrabold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>Resiarte</h1>
                 
                 <div className="hidden md:flex h-full w-full items-center justify-end pr-10">
                     <h1 className='font-extrabold text-4xl num-font'>Ultimo mês<span className='font-light text-2xl'>/{formattedMonth}</span></h1>

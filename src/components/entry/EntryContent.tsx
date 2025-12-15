@@ -103,7 +103,7 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
     return (
         <div className="flex h-full flex-col ">
             <div className="flex p-4 px-8 md:my-5 w-full md:justify-between gap-2 justify-center items-center">
-                <h1 className="text-4xl font-extrabold text-zinc-700 ">Entrada</h1>
+                <h1 className={`text-4xl font-extrabold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'} `}>Entrada</h1>
                 <button
                     className="hidden md:flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow "
                     onClick={() => setIsModalOpen(true)}
@@ -210,6 +210,7 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                 setPrintReady={setPrintReady}
                 onSuccess={handleSuccess}
                 setArrayAddItems={setArrayAddItems}
+                darkMode={darkMode}
             />
 
             <ShortcutListener onShortcut={() => setIsModalOpen(true)} />

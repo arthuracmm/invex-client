@@ -120,13 +120,13 @@ export default function SideBarItem({
             className={`flex flex-col w-full ${item.label === "home" && "hidden md:flex"}`} key={item.label}
         >
             <div
-                className={`flex w-full p-2 rounded-lg cursor-pointer transition-all border 
+                className={`flex w-full p-2 rounded-lg cursor-pointer transition-all border
                     ${activeTab === item.label
                         ? (darkMode
-                            ? 'bg-lime-900 text-lime-300 border-lime-300'
+                            ? 'bg-lime-900/50 text-lime-500 border-lime-700'
                             : 'bg-lime-100 text-lime-600 border-lime-300')
                         : (darkMode
-                            ? 'border-zinc-400'
+                            ? 'border-zinc-800'
                             : 'border-zinc-300')}
                     ${sidebarOpen ? 'w-full' : 'w-0 justify-center'}
                 `}
@@ -165,8 +165,8 @@ export default function SideBarItem({
                                         sx={{
                                             borderColor:
                                                 activeTab === item.label
-                                                    ? '#bef264'
-                                                    : undefined,
+                                                    ? darkMode ? '#4d7c0f' : '#bef264'
+                                                    : darkMode ? '#52525b' : undefined,
                                         }}
                                     />
 

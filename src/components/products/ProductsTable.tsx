@@ -70,33 +70,40 @@ export default function ProductsTable({ products, darkMode }: ProductsTableProps
     return (
         <div className="flex h-full rounded-xl overflow-hidden overflow-y-auto m-4">
             <TableContainer>
-                <Table>
+                <Table
+                    sx={{
+                        '& .MuiTableCell-root': {
+                            borderBottom: `1px solid ${darkMode ? '#3f3f46' : '#e4e4e7'
+                                }`,
+                        },
+                    }}
+                >
                     <TableHead
-                        style={{
-                            position: "sticky",
+                        sx={{
+                            position: 'sticky',
                             top: 0,
-                            backgroundColor: darkMode ? "#52525b" : "#f5f5f5",
-                            zIndex: 1
+                            backgroundColor: darkMode ? '#27272a' : '#f5f5f5',
+                            zIndex: 1,
+                            '& .MuiTableCell-root': {
+                                color: darkMode ? '#d4d4d8' : '#3f3f46',
+                            },
+                            '& .MuiTableSortLabel-root': {
+                                color: darkMode ? '#d4d4d8' : '#3f3f46',
+                                '&:hover': {
+                                    color: darkMode ? '#e4e4e7' : '#27272a',
+                                },
+                                '&.Mui-active': {
+                                    color: darkMode ? '#d4d4d8' : '#3f3f46',
+                                },
+                            },
+                            '& .MuiTableSortLabel-icon': {
+                                color: darkMode ? '#a1a1aa' : '#52525b',
+                            },
+                            '& .MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon': {
+                                color: darkMode ? '#d4d4d8' : '#3f3f46',
+                            },
                         }}
-                        sx={darkMode ? {
-                            "& .MuiTableCell-root": {
-                                color: "gray",
-                            },
-                            "& .MuiTableSortLabel-root": {
-                                color: "white",
-                            },
-                            "& .MuiTableSortLabel-root:hover": {
-                                color: "white",
-                            },
-                            "& .MuiTableSortLabel-root.Mui-active": {
-                                color: "white",
-                            },
-                            "& .MuiTableSortLabel-icon": {
-                                color: "white !important",
-                            }
-                        } : {}}
                     >
-
                         <TableRow>
                             <TableCell sortDirection={orderBy === "shortName" ? order : false}>
                                 <TableSortLabel
@@ -168,7 +175,7 @@ export default function ProductsTable({ products, darkMode }: ProductsTableProps
                             sortedProducts.map((product) => (
                                 <React.Fragment key={product.id}>
                                     <TableRow
-                                        className="hover:bg-lime-50 transition-colors cursor-pointer"
+                                        className={`${darkMode ? 'hover:bg-lime-900/20' : 'hover:bg-lime-50'} transition-colors cursor-pointer`}
                                         onClick={() => {
                                             if (selectedProduct === product.id) {
                                                 setSelectedProduct('')
@@ -177,28 +184,36 @@ export default function ProductsTable({ products, darkMode }: ProductsTableProps
                                             }
                                         }}
                                     >
-                                        <TableCell className="text-white">{product.shortName}</TableCell>
-                                        <TableCell>{product.fullName}</TableCell>
-                                        <TableCell>{product.unitMeasure}</TableCell>
-                                        <TableCell>{product.quantMin}</TableCell>
-                                        <TableCell>
+                                        <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
+                                            {product.shortName}
+                                        </TableCell>
+                                        <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
+                                            {product.fullName}
+                                        </TableCell>
+                                        <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
+                                            {product.unitMeasure}
+                                        </TableCell>
+                                        <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
+                                            {product.quantMin}
+                                        </TableCell>
+                                        <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                             {product?.inventories && product.inventories.length > 0
                                                 ? Array.from(new Set(product.inventories.map(inv => inv.location))).join(", ")
                                                 : null}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                             {product.inventories?.reduce((acc, curr) => acc + curr.quantity, 0) || 0}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                             <div className="flex text-zinc-700  h-8 w-9 rounded-sm items-center justify-center">
-                                                <ChevronRight className={`${selectedProduct === product.id && 'rotate-90'} transition-all`} />
+                                                <ChevronRight className={`${selectedProduct === product.id && 'rotate-90'} transition-all ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`} />
                                             </div>
                                         </TableCell>
                                     </TableRow>
 
                                     {selectedProduct === product.id && (
                                         <TableRow>
-                                            <TableCell colSpan={7}>
+                                            <TableCell colSpan={7} style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                                 <div className="flex w-full  justify-between items-center">
                                                     <div className="flex flex-col text-xl">
                                                         <div className="flex items-center gap-2">

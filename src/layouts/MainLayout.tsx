@@ -48,8 +48,8 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
 
 
     return (
-        <div className={`flex w-full min-h-screen max-h-screen overflow-hidden gap-1 p-1 ${darkMode ? 'bg-zinc-900' : 'bg-zinc-100'} transition-colors`}>
-            <aside className={` ${darkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200'} border rounded-xl transition-colors`}>
+        <div className={`flex w-full min-h-screen max-h-screen overflow-hidden gap-1 p-1 ${darkMode ? 'bg-black/95' : 'bg-zinc-100'} transition-colors`}>
+            <aside className={` ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'} border rounded-xl transition-colors`}>
                 <Sidebar
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
@@ -63,8 +63,8 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
                     setDarkMode={setDarkMode}
                 />
             </aside>
-            <main className={`flex-1 flex flex-col overflow-hidden border ${darkMode ? 'border-zinc-700' : 'border-zinc-200 '} rounded-xl transition-colors`}>
-                <section className={`w-full h-full overflow-hidden ${darkMode ? 'text-white bg-zinc-800' : 'text-zinc-700  bg-white'} transition-colors`}>
+            <main className={`flex-1 flex flex-col overflow-hidden border ${darkMode ? 'border-zinc-800' : 'border-zinc-200 '} rounded-xl transition-colors`}>
+                <section className={`w-full h-full overflow-hidden ${darkMode ? 'text-zinc-300 bg-zinc-900' : 'text-zinc-800  bg-white'} transition-colors`}>
                     {renderContent()}
                 </section>
             </main>

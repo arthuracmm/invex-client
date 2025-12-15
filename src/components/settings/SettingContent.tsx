@@ -13,6 +13,15 @@ export default function SettingsContent({ darkMode }: SettingsContentProps) {
     const [shortcut, setShorcut] = useState<string>('')
     const [radioChecked, setRadioChecked] = useState<boolean>(false);
 
+    const inputColors = {
+        icon: darkMode ? '#a1a1aa' : '#52525b',
+        label: darkMode ? '#d4d4d8' : '#3f3f46',
+        text: darkMode ? '#e4e4e7' : '#27272a',
+        placeholder: darkMode ? '#71717a' : '#a1a1aa',
+        border: darkMode ? '#3f3f46' : '#d4d4d8',
+        focus: '#22c55e',
+    };
+
     useEffect(() => {
         const savedState = localStorage.getItem("shortcut");
         if (!savedState) {
@@ -49,7 +58,7 @@ export default function SettingsContent({ darkMode }: SettingsContentProps) {
     return (
         <div className="flex h-full flex-col ">
             <div className="flex w-full md:justify-between items-center justify-center ">
-                <h1 className={`hidden md:flex text-4xl p-4 px-10 my-5 font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'}`}>Configurações</h1>
+                <h1 className={`hidden md:flex text-4xl p-4 px-10 my-5 font-extrabold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>Configurações</h1>
             </div>
 
             <Divider />
@@ -62,9 +71,34 @@ export default function SettingsContent({ darkMode }: SettingsContentProps) {
                     onClick={() => setWaitingKey(true)}
                     startAdornment={
                         <InputAdornment position="start">
-                            <KeyboardIcon sx={{ mr: 1, color: 'action.active' }} />
+                            <KeyboardIcon
+                                sx={{
+                                    mr: 1,
+                                    color: inputColors.icon,
+                                }}
+                            />
                         </InputAdornment>
                     }
+                    sx={{
+                        color: inputColors.text,
+
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: inputColors.border,
+                        },
+
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: inputColors.focus,
+                        },
+
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: inputColors.focus,
+                        },
+
+                        '& .MuiInputBase-input::placeholder': {
+                            color: inputColors.placeholder,
+                            opacity: 1,
+                        },
+                    }}
                 />
             </div>
             <div className="flex flex-col h-full">

@@ -30,7 +30,7 @@ interface OutputTableProps {
     handleOpenModal: (product: Product) => void;
 }
 
-export default function OutputTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize, handleOpenModal}: OutputTableProps) {
+export default function OutputTable({ movimentation, darkMode, currentPage, setCurrentPage, totalPages, pageSize, handleOpenModal }: OutputTableProps) {
     const [orderBy, setOrderBy] = useState<keyof Movimentation | "shortName" | "fullName" | ''>("");
     const [order, setOrder] = useState<Order>("asc");
     const [sortedMovimentations, setSortedMovimentations] = useState<Movimentation[]>([]);
@@ -83,34 +83,41 @@ export default function OutputTable({ movimentation, darkMode, currentPage, setC
 
     return (
         <div className="flex flex-1 h-full justify-between flex-col gap-4 rounded-xl overflow-hidden overflow-y-auto">
-            <TableContainer className="border border-zinc-300 rounded-xl h-full">
-                <Table>
+            <TableContainer className={`border ${darkMode ? 'border-zinc-800' : 'border-zinc-300 '} rounded-xl h-full`}>
+                <Table
+                    sx={{
+                        '& .MuiTableCell-root': {
+                            borderBottom: `1px solid ${darkMode ? '#3f3f46' : '#e4e4e7'
+                                }`,
+                        },
+                    }}
+                >
                     <TableHead
-                        style={{
-                            position: "sticky",
+                        sx={{
+                            position: 'sticky',
                             top: 0,
-                            backgroundColor: darkMode ? "#52525b" : "#f5f5f5",
-                            zIndex: 1
+                            backgroundColor: darkMode ? '#27272a' : '#f5f5f5',
+                            zIndex: 1,
+                            '& .MuiTableCell-root': {
+                                color: darkMode ? '#d4d4d8' : '#3f3f46',
+                            },
+                            '& .MuiTableSortLabel-root': {
+                                color: darkMode ? '#d4d4d8' : '#3f3f46',
+                                '&:hover': {
+                                    color: darkMode ? '#e4e4e7' : '#27272a',
+                                },
+                                '&.Mui-active': {
+                                    color: darkMode ? '#d4d4d8' : '#3f3f46',
+                                },
+                            },
+                            '& .MuiTableSortLabel-icon': {
+                                color: darkMode ? '#a1a1aa' : '#52525b',
+                            },
+                            '& .MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon': {
+                                color: darkMode ? '#d4d4d8' : '#3f3f46',
+                            },
                         }}
-                        sx={darkMode ? {
-                            "& .MuiTableCell-root": {
-                                color: "gray",
-                            },
-                            "& .MuiTableSortLabel-root": {
-                                color: "white",
-                            },
-                            "& .MuiTableSortLabel-root:hover": {
-                                color: "white",
-                            },
-                            "& .MuiTableSortLabel-root.Mui-active": {
-                                color: "white",
-                            },
-                            "& .MuiTableSortLabel-icon": {
-                                color: "white !important",
-                            }
-                        } : {}}
                     >
-
                         <TableRow>
                             <TableCell sortDirection={orderBy === "shortName" ? order : false}>
                                 <TableSortLabel
@@ -179,26 +186,26 @@ export default function OutputTable({ movimentation, darkMode, currentPage, setC
                         {sortedData.length > 0 ? (
                             sortedData.map((movimentation) => (
                                 <TableRow
-                                    className="hover:bg-lime-50 transition-colors cursor-pointer"
+                                    className={`${darkMode ? 'hover:bg-lime-900/20' : 'hover:bg-lime-50'} transition-colors cursor-pointer`}
                                     key={movimentation.id}
                                     onClick={() => handleOpenModal(movimentation.product)}
                                 >
-                                    <TableCell>
+                                    <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                         {movimentation.product?.shortName}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                         {movimentation.product?.fullName}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                         {movimentation.quantity}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                         {movimentation.location}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                         {movimentation.user.fullName}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell style={{ color: darkMode ? '#d4d4d8' : '#3f3f46' }}>
                                         {dateConverter(movimentation.createdAt)}
                                     </TableCell>
                                 </TableRow>
@@ -214,12 +221,12 @@ export default function OutputTable({ movimentation, darkMode, currentPage, setC
                 </Table>
             </TableContainer>
             <div className="flex w-full justify-center">
-                <div className="flex justify-center items-center gap-2 border border-zinc-300 w-fit rounded-xl overflow-hidden num-font">
+                <div className={`flex justify-center items-center gap-2 border ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} w-fit rounded-xl overflow-hidden num-font`}>
 
                     <button
                         onClick={handlePrevPage}
                         disabled={currentPage === 1}
-                        className="p-2 border-r border-zinc-300 hover:bg-lime-500 hover:text-white transition-colors disabled:text-zinc-300 disabled:hover:bg-zinc-200 cursor-pointer disabled:cursor-not-allowed"
+                        className={`p-2 border-r ${darkMode ? 'border-zinc-800 hover:text-zinc-200 disabled:hover:bg-zinc-800 hover:bg-lime-900' : 'border-zinc-300 hover:text-white disabled:hover:bg-zinc-200 hover:bg-lime-500'}   transition-colors disabled:text-zinc-300  cursor-pointer disabled:cursor-not-allowed`}
                     >
                         <ChevronLeft />
                     </button>
@@ -232,13 +239,13 @@ export default function OutputTable({ movimentation, darkMode, currentPage, setC
                     <button
                         onClick={handleNextPage}
                         disabled={currentPage === Math.ceil(totalPages / pageSize)}
-                        className="p-2 border-l border-zinc-300 hover:bg-lime-500 hover:text-white transition-colors disabled:text-zinc-300 disabled:hover:bg-zinc-200 cursor-pointer disabled:cursor-not-allowed"
+                        className={`p-2 border-l ${darkMode ? 'border-zinc-800 hover:text-zinc-200 disabled:hover:bg-zinc-800 hover:bg-lime-900' : 'border-zinc-300 hover:text-white disabled:hover:bg-zinc-200 hover:bg-lime-500 '} transition-colors disabled:text-zinc-300  cursor-pointer disabled:cursor-not-allowed`}
                     >
                         <ChevronRight />
                     </button>
 
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

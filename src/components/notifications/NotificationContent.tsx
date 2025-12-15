@@ -60,7 +60,7 @@ export default function NotificationsContent({ darkMode }: NotificationsContentP
     return (
         <div className="flex h-full flex-col ">
             <div className="flex w-full md:justify-between items-center justify-center ">
-                <h1 className={`hidden md:flex text-4xl p-4 px-10 my-5 font-extrabold ${darkMode ? 'text-white' : 'text-zinc-700'}`}>Notificações</h1>
+                <h1 className={`hidden md:flex text-4xl p-4 px-10 my-5 font-extrabold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>Notificações</h1>
             </div>
 
             <Divider />
@@ -70,7 +70,7 @@ export default function NotificationsContent({ darkMode }: NotificationsContentP
             ) : (
                 <div className="flex flex-col m-4 gap-2 overflow-y-auto pr-2">
                     {notifications.map((not) => (
-                        <div className="flex w-full items-center justify-between border border-zinc-200 p-4 rounded-xl">
+                        <div className={`flex w-full items-center justify-between border ${darkMode ? 'border-zinc-800' : 'border-zinc-200'} p-4 rounded-xl`}>
                             <div className="flex gap-2 items-center">
                                 <p className="flex gap-1 font-bold">
                                     {not.message.split(' ')[0]}
@@ -78,7 +78,7 @@ export default function NotificationsContent({ darkMode }: NotificationsContentP
                                         {not.message.split(' ').slice(1).join(' ')}
                                     </span>
                                 </p>
-                                <Chip label={dateConverter(not.createdAt)} sx={{ backgroundColor: '#d9f99d' }} />
+                                <Chip label={dateConverter(not.createdAt)} sx={{ backgroundColor: darkMode ? '#3f6212' : '#d9f99d', color: darkMode ? '#e4e4e7' : '#3f3f46' }} />
                             </div>
                             <AntSwitch checked={not.read} onClick={() => handleUpdate(not.id, not.read)} />
                         </div>

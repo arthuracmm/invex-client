@@ -97,18 +97,18 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, setRefreshK
     const id = openPopover ? 'simple-popover' : undefined;
 
     return (
-        <div className={`flex flex-col ${sidebarOpen ? 'w-80' : 'w-24'} h-full overflow-hidden ${darkMode ? 'text-white' : 'text-zinc-700'}  transition-all`}>
+        <div className={`flex flex-col ${sidebarOpen ? 'w-80' : 'w-24'} h-full overflow-hidden ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}  transition-all`}>
             <div className={`flex ${!sidebarOpen && 'flex-col'} justify-between m-4 items-center gap-4 transition-all`}>
                 {sidebarOpen ? (
-                    <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-10" />
+                    <img src="images/akin-NR-icon.png" alt="" className={`object-center h-10 w-10 ${darkMode && 'bg-zinc-300 rounded-full'}`} />
                 ) : (
-                    <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-10" />
+                    <img src="images/akin-NR-icon.png" alt="" className="object-center h-10 w-10 " />
                 )}
 
                 <div className="hidden md:flex">
                     {sidebarOpen && (
                         <button
-                            className={`cursor-pointer ${darkMode ? 'hover:bg-lime-700' : 'hover:bg-lime-100'} h-10 w-10 rounded-xl transition-colors`}
+                            className={`cursor-pointer ${darkMode ? 'hover:bg-lime-900' : 'hover:bg-lime-100'} h-10 w-10 rounded-xl transition-colors`}
                             onClick={() => {
                                 setDarkMode(!darkMode)
                                 setRefreshKey(prev => prev + 1)
@@ -119,7 +119,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, setRefreshK
                     )}
 
                     <button
-                        className={`cursor-pointer ${darkMode ? 'hover:bg-lime-700' : 'hover:bg-lime-100'} h-10 w-10 rounded-xl transition-colors`}
+                        className={`cursor-pointer ${darkMode ? 'hover:bg-lime-900' : 'hover:bg-lime-100'} h-10 w-10 rounded-xl transition-colors`}
                         onClick={() => {
                             setSidebarOpen(!sidebarOpen)
                             setRefreshKey(prev => prev + 1)
@@ -131,7 +131,13 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, setRefreshK
             </div>
             <Divider />
             <div className="flex flex-col gap-2 m-4 items-center">
-                <SelectContent serviceSelected={serviceSelected} setServiceSelected={setServiceSelected} sidebarOpen={sidebarOpen} />
+                <SelectContent
+                    serviceSelected={serviceSelected}
+                    setServiceSelected={setServiceSelected}
+                    sidebarOpen={sidebarOpen}
+                    darkMode={darkMode}
+                />
+
                 {SideBarArrayitems.filter((item) => item.service === serviceSelected).map((i) => (
                     <SideBarItem
                         key={i.label}
@@ -147,55 +153,6 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, setRefreshK
             </div>
             <div className="flex flex-1 h-full w-full p-2 px-4 items-end">
                 <div className="flex items-center cursor-pointer justify-between w-full gap-4">
-                    {user?.establishment && (
-                        <>
-                            <Chip
-                                component='button'
-                                label={user.establishment.name}
-                                onClick={handleClick}
-                            />
-                            <Popover
-                                id={id}
-                                open={openPopover}
-                                anchorEl={anchorEl}
-                                onClose={handleClose}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                sx={{ mt: 1 }}
-                            >
-                                <div className="flex flex-col text-xs gap-2 text-zinc-700">
-                                    <div className="flex gap-2 items-center justify-center w-full mt-4">
-                                        <p className='font-bold text-lg'>{user.establishment.name}</p>
-                                    </div>
-                                    <Divider sx={{ my: 1 }} />
-                                    <div className="flex flex-col gap-2 mx-3 mb-3">
-                                        <div className="flex gap-2 items-center">
-                                            <AlternateEmailIcon />
-                                            <p>{user.establishment.email}</p>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <WorkspacesIcon />
-                                            <p>{user.establishment.type}</p>
-                                        </div>
-                                        <div className="flex gap-2 items-center ">
-                                            <LocationPinIcon />
-                                            <p>
-                                                {user.establishment.adress}, {' '}
-                                                {user.establishment.number}, {' '}
-                                                {user.establishment.neighborhood}
-                                            </p>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <LocationCityIcon />
-                                            <p>{user.establishment.city}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Popover>
-                        </>
-                    )}
                     <div className={`flex w-full justify-between items-center ${!sidebarOpen && 'flex-col gap-4 mb-2'}`}>
                         <Tooltip title={user?.email} arrow>
                             <Avatar
@@ -215,7 +172,7 @@ export default function Sidebar({ activeTab, setActiveTab, setTitle, setRefreshK
                         </p>
                         <button
                             onClick={handleLogout}
-                            className={`${darkMode ? 'text-white hover:text-red-400' : 'text-zinc-700 hover:text-red-800'} transition-colors cursor-pointer`}
+                            className={`${darkMode ? 'text-zinc-300 hover:text-red-400' : 'text-zinc-700 hover:text-red-800'} transition-colors cursor-pointer`}
                             aria-label="Logout"
                             title="Logout"
                         >
