@@ -14,6 +14,10 @@ let failedRequestsQueue: Array<{
 }> = [];
 
 api.interceptors.request.use((config) => {
+    const token = Cookies.get("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
 });
 
@@ -57,7 +61,7 @@ api.interceptors.response.use(
                 failedRequestsQueue = [];
 
                 AuthService.logout();
-                window.location.href = '/authentication/login';
+                window.location.href = '/';
                 return Promise.reject(refreshError);
             } finally {
                 isRefreshing = false;

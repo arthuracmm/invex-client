@@ -57,8 +57,8 @@ export const AuthService = {
 
     const { access_token } = response.data;
 
-    Cookies.set("token", access_token, { expires: 8 / 24, sameSite: "Strict" });
-    Cookies.set("refreshToken", access_token, { expires: 7, sameSite: "Strict" });
+    Cookies.set("token", access_token, { expires: 8 / 24, sameSite: "Lax", secure: window.location.protocol === 'https:' });
+    Cookies.set("refreshToken", access_token, { expires: 7, sameSite: "Lax", secure: window.location.protocol === 'https:' });
     AuthService.startAutoRefresh();
 
     const decodedUser = decodeJWT(access_token);
@@ -72,8 +72,8 @@ export const AuthService = {
     const response = await api.post("/auth/refresh", { refresh_token: refreshToken });
     const { access_token, refresh_token: newRefreshToken } = response.data;
 
-    Cookies.set("token", access_token, { expires: 8 / 24, sameSite: "Strict" });
-    Cookies.set("refreshToken", newRefreshToken, { expires: 7, sameSite: "Strict" });
+    Cookies.set("token", access_token, { expires: 8 / 24, sameSite: "Lax", secure: window.location.protocol === 'https:' });
+    Cookies.set("refreshToken", newRefreshToken, { expires: 7, sameSite: "Lax", secure: window.location.protocol === 'https:' });
 
     return access_token;
   },

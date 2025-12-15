@@ -223,7 +223,7 @@ export default function ProductsTable({ products, darkMode }: ProductsTableProps
                                                         />
                                                         <Tooltip arrow title={`Imprimir ${product.fullName}`}>
                                                             <button
-                                                                onClick={() => handlePrintPdf(product)}
+                                                                onClick={() => handlePrintPdf([{ product, quantity: 1 }])}
                                                                 className="bg-lime-500 h-10 w-10 rounded text-white cursor-pointer"
                                                             >
                                                                 <PrintIcon />

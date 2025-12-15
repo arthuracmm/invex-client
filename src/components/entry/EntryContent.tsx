@@ -42,8 +42,13 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
     const [scannerOpen, setScannerOpen] = useState(false);
 
     const handleCodeDetected = (code: string) => {
-        alert("Código detectado:" + code);
         setScannerOpen(false);
+        const product = products.find((p) => p.id === code);
+        if (product) {
+            handleOpenModal(product);
+        } else {
+            alert(`Produto não encontrado com este código: ${code}`);
+        }
     };
 
     const fetchData = async () => {

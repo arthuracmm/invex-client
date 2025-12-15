@@ -25,6 +25,9 @@ export default function MobileScanner({ onDetected, onClose }: MobileScannerProp
     if (!isMounted) return;
 
     const startScanner = async () => {
+      // Prevent multiple initializations
+      if (scannerRef.current?.isScanning) return;
+
       try {
         // Só garante que o browser permita câmera
         await navigator.mediaDevices.getUserMedia({ video: true });
@@ -42,38 +45,48 @@ export default function MobileScanner({ onDetected, onClose }: MobileScannerProp
           ],
         });
 
-        isScanningRef.current = true;
-
         await scannerRef.current.start(
           { facingMode: "environment" }, // câmera traseira
           { fps: 10, qrbox: undefined },
           async (decodedText) => {
-            if (scannerRef.current && isScanningRef.current) {
+            // Logic handled in callback
+            if (isScanningRef.current) {
               isScanningRef.current = false;
               try {
-                await scannerRef.current.stop();
-              } catch {}
+                await scannerRef.current?.stop();
+              } catch { }
               setCode(decodedText);
               onDetected(decodedText);
             }
           },
           (error) => {
-            console.warn("Erro de leitura:", error);
+            // console.warn("Erro de leitura:", error);
           }
-        );
-      } catch (err) {
+        ).then(() => {
+          // Delay activation logic
+          setTimeout(() => {
+            if (isMounted) isScanningRef.current = true;
+          }, 1500);
+        });
+
+      } catch (err: any) {
         console.error("Erro ao iniciar scanner:", err);
-        alert("Não foi possível acessar a câmera. Certifique-se que outra aba ou app não está usando a câmera.");
+        // Better error message
+        alert(`Erro na câmera: ${err?.message || err}`);
       }
     };
 
     startScanner();
 
     return () => {
-      if (scannerRef.current && isScanningRef.current) {
-        scannerRef.current.stop().catch(() => {});
-        isScanningRef.current = false;
+      // Cleanup logic
+      if (scannerRef.current) {
+        try {
+          scannerRef.current.stop().catch(err => console.warn('Stop failed', err));
+          scannerRef.current.clear();
+        } catch (e) { }
       }
+      isScanningRef.current = false;
     };
   }, [isMounted, onDetected]);
 

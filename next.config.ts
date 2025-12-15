@@ -1,7 +1,13 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    allowedDevOrigins: [
+      'https://hugozera.space',
+      'https://www.hugozera.space',
+      'https://api.hugozera.space',
+      'http://localhost:3001'
+    ]
+  }
+}
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+module.exports = nextConfig

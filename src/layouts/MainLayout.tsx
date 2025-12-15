@@ -30,17 +30,17 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
     const renderContent = () => {
         switch (activeTab) {
             case "home":
-                return <HomeContent refreshKey={refreshKey} darkMode={darkMode}/>;
+                return <HomeContent refreshKey={refreshKey} darkMode={darkMode} />;
             case "products":
-                return <ProductContent darkMode={darkMode}/>;
+                return <ProductContent darkMode={darkMode} />;
             case "entry":
                 return <EntryContent darkMode={darkMode} />;
             case "output":
-                return <OutputContent darkMode={darkMode}/>;
+                return <OutputContent darkMode={darkMode} />;
             case "settings":
-                return <SettingsContent darkMode={darkMode}/>;
+                return <SettingsContent darkMode={darkMode} />;
             case "notifications":
-                return <NotificationsContent darkMode={darkMode}/>;
+                return <NotificationsContent darkMode={darkMode} />;
             default:
                 return null;
         }
@@ -65,7 +65,7 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
             </aside>
             <main className={`flex-1 flex flex-col overflow-hidden border ${darkMode ? 'border-zinc-700' : 'border-zinc-200 '} rounded-xl transition-colors`}>
                 <section className={`w-full h-full overflow-hidden ${darkMode ? 'text-white bg-zinc-800' : 'text-zinc-700  bg-white'} transition-colors`}>
-                    {pathname.includes(activeTab) ? renderContent() : <Loading />}
+                    {renderContent()}
                 </section>
             </main>
         </div>
