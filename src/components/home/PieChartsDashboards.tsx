@@ -1,67 +1,57 @@
 "use client";
 
 import PieChart from "../../ui/PieChart";
-import TimerIcon from '@mui/icons-material/Timer';
-import Person4Icon from '@mui/icons-material/Person4';
-import AutoModeIcon from '@mui/icons-material/AutoMode';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
+import { Dashboard } from "@/src/types/Dashboard";
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import OutputIcon from '@mui/icons-material/Output';
+import LoginIcon from '@mui/icons-material/Login';
 
 interface PieChartsDashboardsProps {
-    refreshKey: number
-    darkMode: boolean | null
+    refreshKey: number;
+    darkMode: boolean | null;
+    dashboard: Dashboard | null
 }
 
 
-export default function PieChartsDashboards({ refreshKey, darkMode }: PieChartsDashboardsProps) {
+export default function PieChartsDashboards({ refreshKey, darkMode, dashboard }: PieChartsDashboardsProps) {
     const chartsData = [
         {
-            name: 'Total de Produtos',
-            icon: <TimerIcon sx={{ fontSize: 30 }} />,
-            data: [
-                { name: '5 Minutos', value: 1048 },
-                { name: '10 Minutos', value: 735 },
-                { name: '40+ Minutos', value: 580 },
-                { name: '1 Hora', value: 210 },
-                { name: '2+ Horas', value: 100 },
-            ],
+            name: 'Maior Quantidade',
+            icon: <TrendingUpIcon sx={{ fontSize: 30 }} />,
+            data: dashboard?.greater.map((item) => ({
+                name: item.product.fullName,
+                value: item.totalQuantity,
+            })),
             colors: ['#52E600', '#56BB1F', '#E6D800', '#E68310', '#E62E10'],
         },
         {
-            name: 'Tipo de Usuário',
-            icon: <Person4Icon sx={{ fontSize: 30 }} />,
-            data: [
-                { name: 'Admin', value: 150 },
-                { name: 'Cliente', value: 800 },
-                { name: 'Fornecedor', value: 320 },
-                { name: 'Gestor', value: 220 },
-                { name: 'Paciente', value: 220 },
-            ],
+            name: 'Menor Quantidade',
+            icon: <TrendingDownIcon sx={{ fontSize: 30 }} />,
+            data: dashboard?.smaller.map((item) => ({
+                name: item.product.fullName,
+                value: item.totalQuantity,
+            })),
             colors: ['#52E600', '#56BB1F', '#E6D800', '#E68310', '#E62E10'],
         },
         {
-            name: 'Status de Tarefas',
-            icon: <AutoModeIcon sx={{ fontSize: 30 }} />,
-            data: [
-                { name: 'Concluídas', value: 400 },
-                { name: 'Pendentes', value: 230 },
-                { name: 'Andamento', value: 150 },
-                { name: 'Atrasadas', value: 50 },
-                { name: 'Não realizado', value: 35 }
-            ],
+            name: 'Maior Entrada',
+            icon: <LoginIcon sx={{ fontSize: 30 }} />,
+            data: dashboard?.topEntry.map((item) => ({
+                name: item.product.fullName,
+                value: Number(item.total),
+            })),
             colors: ['#52E600', '#56BB1F', '#E6D800', '#E68310', '#E62E10'],
         },
         {
-            name: 'Taxa de presença',
-            icon: <FactCheckIcon sx={{ fontSize: 30 }} />,
-            data: [
-                { name: 'Concluídas', value: 400 },
-                { name: 'Pendentes', value: 230 },
-                { name: 'Andamento', value: 150 },
-                { name: 'Atrasadas', value: 50 },
-                { name: 'Não realizado', value: 35 }
-            ],
+            name: 'Maior Saída',
+            icon: <OutputIcon sx={{ fontSize: 30 }} />,
+            data: dashboard?.topOutput.map((item) => ({
+                name: item.product.fullName,
+                value: Number(item.total),
+            })),
             colors: ['#52E600', '#56BB1F', '#E6D800', '#E68310', '#E62E10'],
-        },
+        }
     ];
 
     return (
@@ -73,18 +63,26 @@ export default function PieChartsDashboards({ refreshKey, darkMode }: PieChartsD
                             {chart.icon}
                         </div>
                         <h2 className="font-bold text-lg">{chart.name}</h2>
-                        <PieChart name={chart.name} data={chart.data} colors={chart.colors} refreshKey={refreshKey} />
+
+                        <PieChart
+                            name={chart.name}
+                            data={chart.data ?? []}
+                            colors={chart.colors}
+                            refreshKey={refreshKey}
+                        />
+
                         <div className="flex flex-wrap space-x-5 items-center justify-center">
-                            {chart.data.map((item, index) => (
-                                <div className="flex items-center gap-2" key={item.name}>
+                            {chart.data?.map((item, index) => (
+                                <div className="flex items-center gap-2" key={item.name || index}>
                                     <div
                                         className="flex w-3 h-3 rounded"
-                                        style={{ backgroundColor: chart.colors[index] }}
+                                        style={{ backgroundColor: chart.colors[index % chart.colors.length] }}
                                     />
-                                    <p className="text-sm num-font">{item.name}</p>
+                                    <span>{item.name}</span>
                                 </div>
                             ))}
                         </div>
+
                     </div>
                 ))}
             </div>

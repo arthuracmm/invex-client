@@ -1,5 +1,6 @@
 import api from "../auth/api";
 import { Inventory } from "../../types/Inventory";
+import { Dashboard } from "@/src/types/Dashboard";
 
 interface CreateInventoryDto {
     productId: string;
@@ -15,6 +16,11 @@ export const InventoryService = {
 
     getAll: async (): Promise<Inventory[]> => {
         const response = await api.get("/inventory");
+        return response.data;
+    },
+
+    dashboard: async (): Promise<Dashboard> => {
+        const response = await api.get("/inventory/dashboard");
         return response.data;
     },
 };
