@@ -9,6 +9,8 @@ import Loading from "../Loading";
 import SubInventoryModal from "./SubInventoryModal";
 import OutputTable from "./OutputTable";
 import ShortcutListener from "@/src/ui/ShortcutListener";
+import MobileScanner from "../MobileScanner";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 interface EntryContentProps {
     darkMode: boolean | null
@@ -24,6 +26,19 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
 
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [pageSize, setPageSize] = useState<number>(20)
+
+    const [scannerOpen, setScannerOpen] = useState(false);
+
+    const handleCodeDetected = (code: string) => {
+        setScannerOpen(false);
+        const product = products.find((p) => p.id === code);
+        if (product) {
+            handleOpenModal(product);
+        } else {
+            alert(`Produto não encontrado com este código: ${code}`);
+        }
+    };
+
 
     const fetchData = async () => {
         setLoading(true)
@@ -67,10 +82,10 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
 
     return (
         <div className="flex h-full flex-col ">
-            <div className="flex p-4 px-8 my-5 w-full justify-between items-center ">
+            <div className="flex p-4 px-8 md:my-5 w-full md:justify-between gap-2 justify-center items-center">
                 <h1 className={`text-4xl font-extrabold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'} `}>Saída</h1>
                 <button
-                    className="flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow "
+                    className="hidden md:flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow "
                     onClick={() => setIsModalOpen(true)}
                 >
                     <AddIcon />
@@ -91,6 +106,33 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                     />
                 </div>
             )}
+
+            <div className="flex md:hidden flex-col gap-2 m-5 flex-1 justify-center items-center">
+                <button
+                    className="flex  gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow w-full justify-center"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    <AddIcon />
+                    <p className="font-semibold group-hover:font-black transition-all">Adicionar Manualmente</p>
+                </button>
+                <button
+                    className="flex gap-2 bg-blue-500 px-4 p-2 rounded text-white group cursor-pointer shadow w-full justify-center"
+                    onClick={() => setScannerOpen(true)}
+                >
+                    <CameraAltIcon />
+                    <p className="font-semibold group-hover:font-black transition-all">
+                        Adicionar Pelo Codigo
+                    </p>
+                </button>
+            </div>
+
+            {scannerOpen && (
+                <MobileScanner
+                    onDetected={handleCodeDetected}
+                    onClose={() => setScannerOpen(false)}
+                />
+            )}
+
             <SubInventoryModal
                 open={isModalOpen}
                 onClose={handleCloseModal}
@@ -99,7 +141,7 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                 onSuccess={handleSuccess}
                 darkMode={darkMode}
             />
-            
+
             <ShortcutListener onShortcut={() => setIsModalOpen(true)} />
         </div>
     )

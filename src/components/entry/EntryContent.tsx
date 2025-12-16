@@ -113,17 +113,19 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                 </button>
             </div>
             <Divider />
-            <div className="hidden md:flex h-full p-4 overflow-hidden">
-                <EntryTable
-                    movimentation={movimentation}
-                    darkMode={darkMode}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    totalPages={totalPages}
-                    pageSize={pageSize}
-                    handleOpenModal={handleOpenModal}
-                />
-            </div>
+            {loading ? <Loading /> : (
+                <div className="hidden md:flex h-full p-4">
+                    <EntryTable
+                        movimentation={movimentation}
+                        darkMode={darkMode}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        totalPages={totalPages}
+                        pageSize={pageSize}
+                        handleOpenModal={handleOpenModal}
+                    />
+                </div>
+            )}
             <div className="flex md:hidden flex-col gap-2 m-5 flex-1 justify-center items-center">
                 <button
                     className="flex  gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow w-full justify-center"
