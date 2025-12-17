@@ -82,7 +82,7 @@ export default function OutputTable({ movimentation, darkMode, currentPage, setC
     });
 
     return (
-        <div className="flex flex-1 h-full justify-between flex-col gap-4 rounded-xl overflow-hidden overflow-y-auto">
+        <div className="flex flex-1 h-[80vh] justify-between flex-col gap-4 rounded-xl overflow-hidden overflow-y-auto">
             <TableContainer className={`border ${darkMode ? 'border-zinc-800' : 'border-zinc-300 '} rounded-xl h-full`}>
                 <Table
                     sx={{
