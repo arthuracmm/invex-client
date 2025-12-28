@@ -32,7 +32,16 @@ export default function MessagesDashboard({ darkMode, dashboard }: MessagesDashb
                             <LowPriorityIcon sx={{ fontSize: 70 }} />
                         </div>
                         <div className="flex flex-col items-start m-4">
-                            <h1 className='font-extrabold text-4xl num-font'>{dashboard?.smaller[0].totalQuantity}<span className='font-light text-2xl'>/{dashboard?.smaller[0].product.fullName}</span></h1>
+                            <h1 className='font-extrabold text-4xl num-font'>
+                                {dashboard?.smaller && dashboard.smaller.length > 0 ? (
+                                    <>
+                                        {dashboard.smaller[0].totalQuantity}
+                                        <span className='font-light text-2xl'>/{dashboard.smaller[0].product.fullName}</span>
+                                    </>
+                                ) : (
+                                    <span className="text-2xl">-</span>
+                                )}
+                            </h1>
                             <h2 className="font-bold text-sm text-zinc-400">Produto com menor quantidade</h2>
                         </div>
                     </div>
@@ -44,7 +53,16 @@ export default function MessagesDashboard({ darkMode, dashboard }: MessagesDashb
                             <LowPriorityIcon sx={{ fontSize: 70 }} />
                         </div>
                         <div className="flex flex-col items-start m-4">
-                             <h1 className='font-extrabold text-4xl num-font'>{dashboard?.greater[0].totalQuantity}<span className='font-light text-2xl'>/{dashboard?.greater[0].product.fullName}</span></h1>
+                            <h1 className='font-extrabold text-4xl num-font'>
+                                {dashboard?.greater && dashboard.greater.length > 0 ? (
+                                    <>
+                                        {dashboard.greater[0].totalQuantity}
+                                        <span className='font-light text-2xl'>/{dashboard.greater[0].product.fullName}</span>
+                                    </>
+                                ) : (
+                                    <span className="text-2xl">-</span>
+                                )}
+                            </h1>
                             <h2 className="font-bold text-sm text-zinc-400">Produto com maior quantidade</h2>
                         </div>
                     </div>

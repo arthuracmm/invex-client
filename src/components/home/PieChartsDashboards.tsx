@@ -20,7 +20,7 @@ export default function PieChartsDashboards({ refreshKey, darkMode, dashboard }:
             name: 'Maior Quantidade',
             icon: <TrendingUpIcon sx={{ fontSize: 30 }} />,
             data: dashboard?.greater.map((item) => ({
-                name: item.product.fullName,
+                name: item.product?.fullName ?? 'N/A',
                 value: item.totalQuantity,
             })),
             colors: ['#52E600', '#56BB1F', '#E6D800', '#E68310', '#E62E10'],
@@ -29,7 +29,7 @@ export default function PieChartsDashboards({ refreshKey, darkMode, dashboard }:
             name: 'Menor Quantidade',
             icon: <TrendingDownIcon sx={{ fontSize: 30 }} />,
             data: dashboard?.smaller.map((item) => ({
-                name: item.product.fullName,
+                name: item.product?.fullName ?? 'N/A',
                 value: item.totalQuantity,
             })),
             colors: ['#52E600', '#56BB1F', '#E6D800', '#E68310', '#E62E10'],
@@ -38,7 +38,7 @@ export default function PieChartsDashboards({ refreshKey, darkMode, dashboard }:
             name: 'Maior Entrada',
             icon: <LoginIcon sx={{ fontSize: 30 }} />,
             data: dashboard?.topEntry.map((item) => ({
-                name: item.product.fullName,
+                name: item.product?.fullName ?? 'N/A',
                 value: Number(item.total),
             })),
             colors: ['#52E600', '#56BB1F', '#E6D800', '#E68310', '#E62E10'],
@@ -47,7 +47,7 @@ export default function PieChartsDashboards({ refreshKey, darkMode, dashboard }:
             name: 'Maior Saída',
             icon: <OutputIcon sx={{ fontSize: 30 }} />,
             data: dashboard?.topOutput.map((item) => ({
-                name: item.product.fullName,
+                name: item.product?.fullName ?? 'N/A',
                 value: Number(item.total),
             })),
             colors: ['#52E600', '#56BB1F', '#E6D800', '#E68310', '#E62E10'],

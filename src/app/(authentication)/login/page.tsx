@@ -11,7 +11,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { VisibilityOff } from "@mui/icons-material";
 import LoginIcon from '@mui/icons-material/Login';
 import { useAuth } from "../../../context/AuthContext";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import { AuthService } from "@/src/service/auth/authService";
 
 export default function LoginPage() {
@@ -22,15 +22,18 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [viewPassword, setViewPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const [isMounted, setIsMounted] = useState(false);
-    
+    const [openRegisterModal, setOpenRegisterModal] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [registerData, setRegisterData] = useState({ name: '', email: '', password: '' });
+
     const [toast, setToast] = useState<{ open: boolean; message: string, severity: 'success' | 'error' | 'info' | 'warning'; }>({
         open: false,
         message: '',
         severity: 'info'
     });
-    
+
     useEffect(() => {
         setIsMounted(true);
         setViewPassword(false);
@@ -56,6 +59,31 @@ export default function LoginPage() {
             setToast({ open: true, message: 'Email e/ou senhas incorreto(s)', severity: 'error' });
         } finally {
             setIsLoading(false);
+        }
+    }
+
+
+
+    async function handleRegister() {
+        if (!registerData.name || !registerData.email || !registerData.password) {
+            setToast({ open: true, message: 'Preencha todos os campos', severity: 'warning' });
+            return;
+        }
+
+        setIsRegistering(true);
+        try {
+            const { user } = await AuthService.register(registerData);
+            login(user);
+            setToast({ open: true, message: 'Conta criada com sucesso!', severity: 'success' });
+            setOpenRegisterModal(false);
+            setTimeout(() => {
+                router.push("/home");
+            }, 500);
+        } catch (err) {
+            console.error(err);
+            setToast({ open: true, message: 'Erro ao criar conta. Email pode já estar em uso.', severity: 'error' });
+        } finally {
+            setIsRegistering(false);
         }
     }
 
@@ -155,9 +183,65 @@ export default function LoginPage() {
                             </button>
                         </div>
                     </form>
+                    <div className="mt-4 text-center">
+                        <p className="text-zinc-500 text-sm">Ainda não tem conta?</p>
+                        <button
+                            onClick={() => setOpenRegisterModal(true)}
+                            className="text-[#96bdff] font-bold text-sm hover:underline cursor-pointer"
+                        >
+                            Crie agora
+                        </button>
+                    </div>
                 </div>
 
             </div>
+
+
+
+            <Dialog open={openRegisterModal} onClose={() => setOpenRegisterModal(false)} maxWidth="xs" fullWidth>
+                <DialogTitle>Criar Nova Conta</DialogTitle>
+                <DialogContent>
+                    <div className="flex flex-col gap-4 mt-2">
+                        <div className="flex flex-col">
+                            <label className="text-sm font-semibold text-gray-700 mb-1">Nome Completo</label>
+                            <input
+                                type="text"
+                                placeholder="Seu Nome"
+                                className="border border-zinc-300 rounded-lg p-2 focus:outline-none focus:border-[#96bdff]"
+                                value={registerData.name}
+                                onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="text-sm font-semibold text-gray-700 mb-1">Email</label>
+                            <input
+                                type="email"
+                                placeholder="seu@email.com"
+                                className="border border-zinc-300 rounded-lg p-2 focus:outline-none focus:border-[#96bdff]"
+                                value={registerData.email}
+                                onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="text-sm font-semibold text-gray-700 mb-1">Senha</label>
+                            <input
+                                type="password"
+                                placeholder="******"
+                                className="border border-zinc-300 rounded-lg p-2 focus:outline-none focus:border-[#96bdff]"
+                                value={registerData.password}
+                                onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenRegisterModal(false)} color="inherit">Cancelar</Button>
+                    <Button onClick={handleRegister} variant="contained" sx={{ bgcolor: '#96bdff', ':hover': { bgcolor: '#7ea4e6' } }} disabled={isRegistering}>
+                        {isRegistering ? <Loader2Icon className="animate-spin w-5 h-5" /> : 'Cadastrar'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <Snackbar
                 open={toast.open}
                 autoHideDuration={3000}

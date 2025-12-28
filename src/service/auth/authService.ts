@@ -67,6 +67,27 @@ export const AuthService = {
     return { access_token, user: userDetails.data };
   },
 
+  register: async ({ name, email, password }: any) => {
+    const response = await api.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, { fullName: name, email, password }, {
+      withCredentials: true,
+    });
+
+    // The register endpoint already logs the user in and returns a cookie, 
+    // but we might need the token response similar to login
+    // Based on my controller change: return this.login(...) which returns access_token.
+
+    const { access_token } = response.data;
+
+    Cookies.set("token", access_token, { expires: 8 / 24, sameSite: "Lax", secure: window.location.protocol === 'https:' });
+    Cookies.set("refreshToken", access_token, { expires: 7, sameSite: "Lax", secure: window.location.protocol === 'https:' });
+    AuthService.startAutoRefresh();
+
+    const decodedUser = decodeJWT(access_token);
+    const userDetails = await api.get(`/users/${decodedUser.sub}`);
+
+    return { access_token, user: userDetails.data };
+  },
+
   refreshToken: async () => {
     const refreshToken = Cookies.get("refreshToken");
     const response = await api.post("/auth/refresh", { refresh_token: refreshToken });
