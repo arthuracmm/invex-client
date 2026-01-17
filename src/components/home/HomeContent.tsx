@@ -37,10 +37,13 @@ export default function HomeContent({ refreshKey, darkMode }: HomeContentProps) 
         fetchData();
     }, []);
 
-    const today = new Date();
-    const monthName = today.toLocaleString('pt-BR', { month: 'long' });
+    const [formattedMonth, setFormattedMonth] = useState("");
 
-    const formattedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase();
+    useEffect(() => {
+        const today = new Date();
+        const monthName = today.toLocaleString('pt-BR', { month: 'long' });
+        setFormattedMonth(monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase());
+    }, []);
 
     return (
         <div className="flex h-full flex-col ">

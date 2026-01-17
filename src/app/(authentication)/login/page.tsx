@@ -26,7 +26,7 @@ export default function LoginPage() {
     const [isMounted, setIsMounted] = useState(false);
     const [openRegisterModal, setOpenRegisterModal] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
-    const [registerData, setRegisterData] = useState({ name: '', email: '', password: '' });
+    const [registerData, setRegisterData] = useState({ name: '', email: '', password: '', secretKey: '' });
 
     const [toast, setToast] = useState<{ open: boolean; message: string, severity: 'success' | 'error' | 'info' | 'warning'; }>({
         open: false,
@@ -65,7 +65,7 @@ export default function LoginPage() {
 
 
     async function handleRegister() {
-        if (!registerData.name || !registerData.email || !registerData.password) {
+        if (!registerData.name || !registerData.email || !registerData.password || !registerData.secretKey) {
             setToast({ open: true, message: 'Preencha todos os campos', severity: 'warning' });
             return;
         }
@@ -233,6 +233,17 @@ export default function LoginPage() {
                             />
                         </div>
                     </div>
+                    <div className="flex flex-col mt-4">
+                        <label className="text-sm font-semibold text-gray-700 mb-1">Código de Convite</label>
+                        <input
+                            type="text"
+                            placeholder="Chave de registro"
+                            className="border border-zinc-300 rounded-lg p-2 focus:outline-none focus:border-[#96bdff]"
+                            value={registerData.secretKey}
+                            onChange={(e) => setRegisterData({ ...registerData, secretKey: e.target.value })}
+                        />
+                    </div>
+
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenRegisterModal(false)} color="inherit">Cancelar</Button>
@@ -252,6 +263,6 @@ export default function LoginPage() {
                     {toast.message}
                 </Alert>
             </Snackbar>
-        </div>
+        </div >
     );
 }

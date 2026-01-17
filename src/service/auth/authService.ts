@@ -67,8 +67,8 @@ export const AuthService = {
     return { access_token, user: userDetails.data };
   },
 
-  register: async ({ name, email, password }: any) => {
-    const response = await api.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, { fullName: name, email, password }, {
+  register: async ({ name, email, password, secretKey }: any) => {
+    const response = await api.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, { fullName: name, email, password, secretKey }, {
       withCredentials: true,
     });
 
