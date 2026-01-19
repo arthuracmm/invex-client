@@ -14,6 +14,9 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import { JSX, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { NotificationsService } from "@/src/service/notifications/notificationsService";
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import { useAuth } from "@/src/context/AuthContext";
 
 export const SideBarArrayitems = [
     {
@@ -24,6 +27,15 @@ export const SideBarArrayitems = [
         service: 'stock',
         icon: <HomeIcon />,
         iconOutlined: <HomeOutlinedIcon />
+    },
+    {
+        type: 'item',
+        name: 'Usuarios',
+        title: 'Gerenciamento dos usuarios',
+        label: 'users',
+        service: 'stock',
+        icon: <PeopleAltIcon />,
+        iconOutlined: <PeopleAltOutlinedIcon />
     },
     {
         type: 'item',
@@ -69,7 +81,8 @@ export const SideBarArrayitems = [
         service: 'stock',
         icon: <SettingsIcon />,
         iconOutlined: <SettingsOutlinedIcon />
-    }
+    },
+
 ]
 
 interface SideBarItemProps {
@@ -97,6 +110,7 @@ export default function SideBarItem({
     darkMode,
     setTitle
 }: SideBarItemProps) {
+    const { user } = useAuth()
     const router = useRouter();
 
     const [hasNotification, setHasNotification] = useState<boolean>(false)
@@ -117,7 +131,10 @@ export default function SideBarItem({
 
     return (
         <div
-            className={`flex flex-col w-full ${item.label === "home" && "hidden md:flex"}`} key={item.label}
+            className={`flex flex-col w-full
+                ${item.label === "home" && "hidden md:flex"}
+                  ${item.label === "users" && user?.role !== "admin" ? "hidden" : ""}
+            `} key={item.label}
         >
             <div
                 className={`flex w-full p-2 rounded-lg cursor-pointer transition-all border

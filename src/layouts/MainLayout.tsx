@@ -10,6 +10,7 @@ import OutputContent from '../components/output/OutputContent';
 import SettingsContent from '../components/settings/SettingContent';
 import Sidebar from '../components/sidebar/Sidebar';
 import NotificationsContent from '../components/notifications/NotificationContent';
+import UsersContent from '../components/users/UsersContent';
 
 interface MainLayoutProps {
     activeTab: string;
@@ -31,6 +32,8 @@ export default function MainLayout({ activeTab, setActiveTab, sidebarOpen, setSi
         switch (activeTab) {
             case "home":
                 return <HomeContent refreshKey={refreshKey} darkMode={darkMode} />;
+            case "users":
+                return <UsersContent darkMode={darkMode} />;
             case "products":
                 return <ProductContent darkMode={darkMode} />;
             case "entry":
