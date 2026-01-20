@@ -173,12 +173,40 @@ export default function UsersModal({ open, onClose, darkMode, selectedUser, fetc
                                 />
 
                                 <FormControl variant="outlined" fullWidth>
-                                    <InputLabel id="role-label">Cargo</InputLabel>
+                                    <InputLabel
+                                        id="role-label"
+                                        sx={{
+                                            color: inputColors.label,
+                                            '&.Mui-focused': {
+                                                color: inputColors.focus,
+                                            },
+                                        }}>Cargo</InputLabel>
                                     <Select
                                         labelId="role-label"
                                         value={role}
                                         onChange={(e) => setRole(e.target.value)}
                                         label="Cargo"
+                                        sx={{
+                                            color: inputColors.text,
+                                            '& ~ .MuiInputLabel-root': {
+                                                color: inputColors.label,
+                                            },
+                                            '&.Mui-focused ~ .MuiInputLabel-root': {
+                                                color: inputColors.focus,
+                                            },
+                                            '& .MuiSelect-icon': {
+                                                color: inputColors.icon,
+                                            },
+                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: inputColors.border,
+                                            },
+                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: inputColors.focus,
+                                            },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: inputColors.focus,
+                                            },
+                                        }}
                                     >
                                         <MenuItem value="">Nenhum</MenuItem>
                                         <MenuItem value="user">Usuario</MenuItem>

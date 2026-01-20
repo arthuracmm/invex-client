@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const userDetails = await api.get(`/users/${decodedUser.sub}`);
       setUser(userDetails.data);
-      console.log(userDetails.data)
     } catch (error) {
       console.error("Erro ao buscar usuário:", error);
       setUser(null);

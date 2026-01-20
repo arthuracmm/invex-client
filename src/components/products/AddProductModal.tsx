@@ -13,17 +13,26 @@ import MeasureIcon from '@mui/icons-material/Scale';
 import NumbersIcon from '@mui/icons-material/Numbers';
 import { ProductService } from "../../service/products/productService";
 import { Product } from "../../types/Products";
+import { usersService } from "@/src/service/users/usersService";
+import { number } from "echarts";
 
 interface AddProductModalProps {
     open: boolean;
     onClose: () => void;
     onSuccess: () => void;
     darkMode: boolean | null
+    selectedId: string
 }
 
-export default function AddProductModal({ open, onClose, onSuccess, darkMode }: AddProductModalProps) {
+export default function AddProductModal({ open, onClose, onSuccess, darkMode, selectedId }: AddProductModalProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [formData, setFormData] = useState({
+        shortName: "",
+        fullName: "",
+        unitMeasure: "",
+        quantMin: 0,
+    });
 
     const inputColors = {
         icon: darkMode ? '#a1a1aa' : '#52525b',
@@ -34,20 +43,34 @@ export default function AddProductModal({ open, onClose, onSuccess, darkMode }: 
         focus: '#22c55e',
     };
 
-    const [formData, setFormData] = useState({
-        shortName: "",
-        fullName: "",
-        unitMeasure: "",
-        quantMin: undefined,
-    });
+    const fetchProduct = async () => {
+        try {
+            const data = await ProductService.getOne(selectedId);
+            setFormData({
+                shortName: data?.shortName,
+                fullName: data?.fullName,
+                unitMeasure: data?.unitMeasure,
+                quantMin: data?.quantMin,
+            })
+        } catch (error) {
+            console.error("Failed to fetch products:", error);
+        }
+    };
 
     useEffect(() => {
-        if (!open) {
+        if (selectedId !== '') {
+            fetchProduct()
+        }
+    }, [selectedId]);
+
+
+    useEffect(() => {
+        if (!open && selectedId === '') {
             setFormData({
                 shortName: "",
                 fullName: "",
                 unitMeasure: "",
-                quantMin: undefined,
+                quantMin: 0,
             });
             setError(null);
         }
@@ -69,8 +92,14 @@ export default function AddProductModal({ open, onClose, onSuccess, darkMode }: 
         setError(null);
 
         try {
-            await ProductService.create(formData as Product);
-            onSuccess();
+            if (selectedId !== '') {
+
+                await ProductService.update(selectedId, formData as Product);
+                onSuccess();
+            } else {
+                await ProductService.create(formData as Product);
+                onSuccess();
+            }
             onClose();
         } catch (err: any) {
             console.error("Erro ao criar produto:", err);
@@ -88,7 +117,7 @@ export default function AddProductModal({ open, onClose, onSuccess, darkMode }: 
         <Modal open={open} onClose={onClose} className="flex items-center justify-center text-zinc-700">
             <div className={`flex flex-col ${darkMode ? 'bg-zinc-800' : 'bg-white'} shadow-2xl md:w-[60%] md:h-[60%] rounded-2xl outline-none overflow-hidden relative pb-12 md:pb-0`}>
                 <div className="flex p-8 px-10 w-full md:justify-between justify-center items-center ">
-                    <h1 className={`md:text-3xl text-2xl font-bold ${darkMode ? 'text-zinc-200' : 'text-zinc-700'}`}>Adicionar Novo Produto</h1>
+                    <h1 className={`md:text-3xl text-2xl font-bold ${darkMode ? 'text-zinc-200' : 'text-zinc-700'}`}>{selectedId !== '' ? 'Editar produto' : 'Adicionar Novo Produto'}</h1>
                     <button
                         onClick={onClose}
                         className="cursor-pointer hover:bg-emerald-50 rounded-full p-2 transition-colors box-content"
@@ -285,7 +314,7 @@ export default function AddProductModal({ open, onClose, onSuccess, darkMode }: 
                         disabled={loading || !formData.shortName || !formData.fullName || !formData.unitMeasure}
                         className="bg-lime-500 p-2 px-6 rounded cursor-pointer text-white font-semibold hover:font-black transition-all disabled:opacity-50"
                     >
-                        {loading ? <CircularProgress size={24} /> : "Adicionar"}
+                        {loading ? <CircularProgress size={24} /> : (selectedId !== '' ? "Atualizar" : "Adicionar")}
                     </button>
                 </div>
             </div>

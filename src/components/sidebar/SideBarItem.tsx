@@ -119,7 +119,6 @@ export default function SideBarItem({
         try {
             const response = await NotificationsService.hasNotification()
             setHasNotification(response);
-            console.log(response)
         } catch (error) {
             console.error("Failed to fetch data", error);
         }

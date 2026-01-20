@@ -58,11 +58,11 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
         setLoading(true);
         try {
             const [productsData, movimentationEntryData] = await Promise.all([
-                ProductService.getAll(),
+                ProductService.getAll(1, 1000),
                 MovimentationService.getAllEntry(currentPage, pageSize)
             ]);
 
-            setProducts(productsData);
+            setProducts(productsData.data);
             setMovimentation(movimentationEntryData.data);
             setTotalPages(movimentationEntryData.total);
         } catch (error) {
