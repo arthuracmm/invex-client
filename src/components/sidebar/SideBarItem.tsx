@@ -132,7 +132,6 @@ export default function SideBarItem({
         <div
             className={`flex flex-col w-full
                 ${item.label === "home" && "hidden md:flex"}
-                  ${item.label === "users" && user?.role !== "admin" ? "hidden" : ""}
             `} key={item.label}
         >
             <div

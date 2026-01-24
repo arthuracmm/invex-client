@@ -16,6 +16,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import MeasureIcon from '@mui/icons-material/Scale';
 import { Users } from "@/src/types/Users";
 import { usersService } from "@/src/service/users/usersService";
+import { useAuth } from "@/src/context/AuthContext";
 
 interface UsersModalProps {
     open: boolean;
@@ -27,6 +28,8 @@ interface UsersModalProps {
 
 export default function UsersModal({ open, onClose, darkMode, selectedUser, fetchUsers }: UsersModalProps) {
     if (!selectedUser) return
+    const { user } = useAuth();
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -96,6 +99,7 @@ export default function UsersModal({ open, onClose, darkMode, selectedUser, fetc
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
                                     fullWidth
+                                    disabled={user?.role !== 'admin'}
                                     required
                                     inputProps={{ maxLength: 3 }}
                                     InputProps={{
@@ -141,6 +145,7 @@ export default function UsersModal({ open, onClose, darkMode, selectedUser, fetc
                                     onChange={(e) => setEmail(e.target.value)}
                                     fullWidth
                                     required
+                                    disabled={user?.role !== 'admin'}
                                     InputProps={{
                                         startAdornment: <MeasureIcon sx={{ mr: 1, color: inputColors.icon }} />
                                     }}
@@ -186,6 +191,7 @@ export default function UsersModal({ open, onClose, darkMode, selectedUser, fetc
                                         value={role}
                                         onChange={(e) => setRole(e.target.value)}
                                         label="Cargo"
+                                        disabled={user?.role !== 'admin'}
                                         sx={{
                                             color: inputColors.text,
                                             '& ~ .MuiInputLabel-root': {

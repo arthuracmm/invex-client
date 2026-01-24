@@ -67,14 +67,10 @@ export const AuthService = {
     return { access_token, user: userDetails.data };
   },
 
-  register: async ({ name, email, password, secretKey }: any) => {
-    const response = await api.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, { fullName: name, email, password, secretKey }, {
-      withCredentials: true,
+  register: async (data: { name: string, email: string, password: string }) => {
+    const response = await api.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, { fullName: data.name, email: data.email, password: data.password }, {
+      withCredentials: true
     });
-
-    // The register endpoint already logs the user in and returns a cookie, 
-    // but we might need the token response similar to login
-    // Based on my controller change: return this.login(...) which returns access_token.
 
     const { access_token } = response.data;
 

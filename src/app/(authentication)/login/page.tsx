@@ -4,29 +4,31 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
-import Divider from '@mui/material/Divider';
 import Person4OutlinedIcon from '@mui/icons-material/Person4Outlined';
 import HttpsIcon from '@mui/icons-material/Https';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { VisibilityOff } from "@mui/icons-material";
 import LoginIcon from '@mui/icons-material/Login';
 import { useAuth } from "../../../context/AuthContext";
-import { Alert, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { AuthService } from "@/src/service/auth/authService";
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import { UsersApi } from "@/src/service/auth/createUser";
 
 export default function LoginPage() {
     const router = useRouter();
     const { login } = useAuth();
 
-    const [name, setName] = useState("");
+    const [code, setCode] = useState("");
+    const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [cpf, setCpf] = useState("");
     const [viewPassword, setViewPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const [isMounted, setIsMounted] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
-    const [registerData, setRegisterData] = useState({ name: '', email: '', password: '', secretKey: '' });
 
     const [toast, setToast] = useState<{ open: boolean; message: string, severity: 'success' | 'error' | 'info' | 'warning'; }>({
         open: false,
@@ -49,12 +51,18 @@ export default function LoginPage() {
 
         if (isRegistering) {
             try {
-                const { user } = await AuthService.register({ name, email, password });
-                login(user);
-                setToast({ open: true, message: 'Conta criada com sucesso!', severity: 'success' });
-                setTimeout(() => {
-                    router.push("/home");
-                }, 500);
+                if (process.env.NEXT_PUBLIC_CODE !== code) {
+                    return setToast({
+                        open: true, message: 'Código de registro inválido.', severity: 'error'
+                    });
+                } else {
+                    await UsersApi.create({ fullName, email, password, cpf }, code);
+                    await AuthService.login({ email, password });
+                    setTimeout(() => {
+                        router.push("/home");
+                    }, 500);
+                    setToast({ open: true, message: 'Conta criada com sucesso!', severity: 'success' });
+                }
             } catch (err) {
                 console.log(err)
                 setToast({ open: true, message: 'Não foi possivel criar a conta, Tente novamente.', severity: 'error' });
@@ -81,25 +89,6 @@ export default function LoginPage() {
 
 
 
-    async function handleRegister() {
-        if (!registerData.name || !registerData.email || !registerData.password || !registerData.secretKey) {
-            setToast({ open: true, message: 'Preencha todos os campos', severity: 'warning' });
-            return;
-        }
-
-        setIsRegistering(true);
-        try {
-
-        } catch (err) {
-            console.error(err);
-            setToast({ open: true, message: 'Erro ao criar conta. Email pode já estar em uso.', severity: 'error' });
-        } finally {
-            setIsRegistering(false);
-        }
-    }
-
-
-
     const handleCloseToast = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') return;
         setToast(prev => ({ ...prev, open: false }));
@@ -114,22 +103,56 @@ export default function LoginPage() {
                     </div>
                     <form onSubmit={handleLogin}>
                         {isRegistering && (
-                            <div className="mb-3 flex w-full flex-col">
-                                <label htmlFor="name" className="mb-1 font-semibold text-sm text-gray-700">
-                                    Nome completo
-                                </label>
-                                <div className="flex bg-white border border-zinc-300 text-zinc-700 rounded-lg text-sm relative overflow-hidden">
-                                    <Person4OutlinedIcon className="absolute top-1/2 left-2 z-10 transform -translate-y-1/2" sx={{ width: 20 }} />
-                                    <input
-                                        id="name"
-                                        placeholder="joao.silva@example.com"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        autoComplete="email"
-                                        className="bg-white p-3 pl-10 w-full h-full border-none focus:outline-none min-w-50"
-                                    />
+                            <>
+                                <div className="mb-3 flex w-full flex-col">
+                                    <label htmlFor="name" className="mb-1 font-semibold text-sm text-gray-700">
+                                        Codigo da empresa
+                                    </label>
+                                    <div className="flex bg-white border border-zinc-300 text-zinc-700 rounded-lg text-sm relative overflow-hidden">
+                                        <HomeWorkIcon className="absolute top-1/2 left-2 z-10 transform -translate-y-1/2" sx={{ width: 20 }} />
+                                        <input
+                                            id="code"
+                                            placeholder="Credencial da empresa"
+                                            value={code}
+                                            onChange={(e) => setCode(e.target.value)}
+                                            autoComplete="email"
+                                            className="bg-white p-3 pl-10 w-full h-full border-none focus:outline-none min-w-50"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                                <div className="mb-3 flex w-full flex-col">
+                                    <label htmlFor="name" className="mb-1 font-semibold text-sm text-gray-700">
+                                        Nome completo
+                                    </label>
+                                    <div className="flex bg-white border border-zinc-300 text-zinc-700 rounded-lg text-sm relative overflow-hidden">
+                                        <Person4OutlinedIcon className="absolute top-1/2 left-2 z-10 transform -translate-y-1/2" sx={{ width: 20 }} />
+                                        <input
+                                            id="fullName"
+                                            placeholder="João Andrade Silva Costa"
+                                            value={fullName}
+                                            onChange={(e) => setFullName(e.target.value)}
+                                            autoComplete="fullName"
+                                            className="bg-white p-3 pl-10 w-full h-full border-none focus:outline-none min-w-50"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mb-3 flex w-full flex-col">
+                                    <label htmlFor="name" className="mb-1 font-semibold text-sm text-gray-700">
+                                        CPF
+                                    </label>
+                                    <div className="flex bg-white border border-zinc-300 text-zinc-700 rounded-lg text-sm relative overflow-hidden">
+                                        <Person4OutlinedIcon className="absolute top-1/2 left-2 z-10 transform -translate-y-1/2" sx={{ width: 20 }} />
+                                        <input
+                                            id="cpf"
+                                            placeholder="111.111.111-11"
+                                            value={cpf}
+                                            onChange={(e) => setCpf(e.target.value)}
+                                            autoComplete="cpf"
+                                            className="bg-white p-3 pl-10 w-full h-full border-none focus:outline-none min-w-50"
+                                        />
+                                    </div>
+                                </div>
+                            </>
                         )}
                         <div className="mb-3 flex w-full flex-col">
                             <label htmlFor="email" className="mb-1 font-semibold text-sm text-gray-700">

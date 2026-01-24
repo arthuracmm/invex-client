@@ -28,6 +28,7 @@ interface User {
   role: string;
   cpf: string;
   email: string;
+  code:string;
   establishment: Establishment
   [key: string]: any;
 }
