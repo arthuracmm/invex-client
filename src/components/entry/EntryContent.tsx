@@ -13,6 +13,8 @@ import MobileScanner from "../MobileScanner";
 import ShortcutListener from "@/src/ui/ShortcutListener";
 import PrintIcon from '@mui/icons-material/Print';
 import handlePrintStockPdf from "@/src/utils/HandlePrint";
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import * as XLSX from "xlsx";
 
 interface EntryContentProps {
     darkMode: boolean | null
@@ -100,6 +102,26 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
         fetchData();
     };
 
+    const handleExportSchedules = () => {
+        if (!products || products.length === 0) {
+            return;
+        }
+
+        const formattedData = movimentation.filter((mov) => mov.type === "entry").map((movimentation) => ({
+            Produto: movimentation.product.fullName,
+            Localização: movimentation.location,
+            Quantidade: movimentation.quantity,
+            Usuario: movimentation.user.fullName,
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
+        const workbook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Entrada");
+
+        XLSX.writeFile(workbook, `entrada${new Date().toISOString().slice(0, 10)}.xlsx`);
+    };
+
     if (loading) return <Loading />;
 
     return (
@@ -109,13 +131,21 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
                     Entrada
                 </h1>
 
-                <button
-                    className="hidden md:flex gap-2 bg-lime-500 px-4 p-2 rounded text-white shadow"
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    <AddIcon />
-                    <p className="font-semibold">Adicionar Entrada</p>
-                </button>
+                <div className="flex gap-2 items-center">
+                    <button
+                        className="hidden md:flex gap-2 bg-lime-500 px-4 p-2 rounded text-white shadow"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <AddIcon />
+                        <p className="font-semibold">Adicionar Entrada</p>
+                    </button>
+                    <button
+                        className="flex font-bold bg-zinc-100 items-center rounded-xl p-3 cursor-pointer hover:font-black hover:bg-zinc-200 transition-all"
+                        onClick={handleExportSchedules}
+                    >
+                        <SaveAltIcon />
+                    </button>
+                </div>
             </div>
 
             <Divider />

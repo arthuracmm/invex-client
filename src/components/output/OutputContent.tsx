@@ -11,6 +11,8 @@ import OutputTable from "./OutputTable";
 import ShortcutListener from "@/src/ui/ShortcutListener";
 import MobileScanner from "../MobileScanner";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import * as XLSX from "xlsx";
 
 interface EntryContentProps {
     darkMode: boolean | null
@@ -80,17 +82,47 @@ export default function EntryContent({ darkMode }: EntryContentProps) {
         fetchData();
     };
 
+    const handleExportSchedules = () => {
+        if (!products || products.length === 0) {
+            return;
+        }
+
+        const formattedData = movimentation.filter((mov) => mov.type === "output").map((movimentation) => ({
+            Produto: movimentation.product.fullName,
+            Localização: movimentation.location,
+            Quantidade: movimentation.quantity,
+            Usuario: movimentation.user.fullName,
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
+        const workbook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Saida");
+
+        XLSX.writeFile(workbook, `saida${new Date().toISOString().slice(0, 10)}.xlsx`);
+    };
+
+
     return (
         <div className="flex h-full flex-col ">
             <div className="flex p-4 px-8 md:my-5 w-full md:justify-between gap-2 justify-center items-center">
                 <h1 className={`text-4xl font-extrabold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'} `}>Saída</h1>
-                <button
-                    className="hidden md:flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow "
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    <AddIcon />
-                    <p className="font-semibold group-hover:font-black transition-all">Adicionar Saída</p>
-                </button>
+
+                <div className="flex gap-2 items-center">
+                    <button
+                        className="hidden md:flex gap-2 bg-lime-500 px-4 p-2 rounded text-white group cursor-pointer shadow "
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <AddIcon />
+                        <p className="font-semibold group-hover:font-black transition-all">Adicionar Saída</p>
+                    </button>
+                    <button
+                        className="flex font-bold bg-zinc-100 items-center rounded-xl p-3 cursor-pointer hover:font-black hover:bg-zinc-200 transition-all"
+                        onClick={handleExportSchedules}
+                    >
+                        <SaveAltIcon />
+                    </button>
+                </div>
             </div>
             <Divider />
             {loading ? <Loading /> : (

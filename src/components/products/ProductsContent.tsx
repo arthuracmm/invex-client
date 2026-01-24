@@ -46,18 +46,22 @@ export default function ProductContent({ darkMode }: ProductContentProps) {
             return;
         }
 
-        const formattedData = products.map((products) => ({
-            Nome_Curto: products.shortName,
-            Nome_Completo: products.fullName,
-            Medida: products.unitMeasure,
+        const formattedData = products.map((product) => ({
+            Nome_Curto: product.shortName,
+            Nome_Completo: product.fullName,
+            Medida: product.unitMeasure,
+            Quantidade: product.inventories?.reduce((acc, curr) => acc + curr.quantity, 0) || 0,
+            Localizações: product?.inventories && product.inventories.length > 0
+                ? Array.from(new Set(product.inventories.map(inv => inv.location))).join(", ")
+                : null,
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(formattedData);
         const workbook = XLSX.utils.book_new();
 
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Agendamentos");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Produtos");
 
-        XLSX.writeFile(workbook, "agendamentos.xlsx");
+        XLSX.writeFile(workbook, `produtos${new Date().toISOString().slice(0, 10)}.xlsx`);
     };
 
     useEffect(() => {
