@@ -3,6 +3,5 @@ node_modules
 npm-debug.log
 .git
 .gitignore
-*.md
+.md
 .env.local
-.env

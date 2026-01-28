@@ -46,6 +46,8 @@ export default function LoginPage() {
     }
 
     async function handleLogin(e: React.FormEvent) {
+        console.log('BUSCANDO API DO ENV:', process.env.NEXT_PUBLIC_API_URL)
+        console.log('BUSCANDO CODE DO ENV:', process.env.NEXT_PUBLIC_CODE)
         e.preventDefault();
         setIsLoading(true);
 
